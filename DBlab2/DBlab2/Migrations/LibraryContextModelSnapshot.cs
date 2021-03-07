@@ -219,9 +219,6 @@ namespace DBlab2.Migrations
                     b.Property<string>("LastName")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("SocionicType")
-                        .HasColumnType("TEXT");
-
                     b.Property<int>("Year")
                         .HasColumnType("INTEGER");
 

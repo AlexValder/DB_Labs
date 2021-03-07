@@ -7,7 +7,6 @@ namespace DBlab2 {
         public string LastName { get; set; }
         public int Year { get; set; }
         public int GroupId { get; set; }
-        public string SocionicType { get; set; }
 
         public virtual Group Group { get; set; }
         public virtual ICollection<StudentCard> StudentCards { get; set; }

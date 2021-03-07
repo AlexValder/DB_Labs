@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DBlab2.Migrations
 {
     [DbContext(typeof(LibraryContext))]
-    [Migration("20210307220128_InitialMigration")]
+    [Migration("20210307225302_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -219,9 +219,6 @@ namespace DBlab2.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("LastName")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("SocionicType")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Year")
