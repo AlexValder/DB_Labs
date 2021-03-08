@@ -8,7 +8,5 @@ namespace DBlab2 {
         public int PositionId { get; set; }
 
         public virtual Position Position { get; set; }
-        public virtual ICollection<StudentCard> StudentCards { get; set; }
-        public virtual ICollection<TeacherCard> TeacherCards { get; set; }
     }
 }
