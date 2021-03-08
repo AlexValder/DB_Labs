@@ -8,6 +8,5 @@ namespace DBlab2 {
         public int CathedraId { get; set; }
 
         public virtual Cathedra Cathedra { get; set; }
-        public virtual ICollection<TeacherCard> TeacherCards { get; set; }
     }
 }

@@ -1,9 +1,11 @@
-﻿namespace DBlab2 {
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace DBlab2 {
     public class TeacherCard {
         public int Id { get; set; }
         public int TeacherId { get; set; }
-        public int TakenDate { get; set; }
-        public int ReturnedDate { get; set; }
+        [Required] public int TakenDate { get; set; }
+        public int? ReturnedDate { get; set; }
         public int LibraryEmployeeId { get; set; }
         public int BookId { get; set; }
 

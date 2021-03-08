@@ -7,7 +7,5 @@ namespace DBlab2 {
         public string Name { get; set; }
 
         public virtual Faculty Faculty { get; set; }
-        public virtual ICollection<Group> Groups { get; set; }
-        public virtual ICollection<Teacher> Teachers { get; set; }
     }
 }
