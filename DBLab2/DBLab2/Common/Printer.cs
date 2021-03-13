@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Diagnostics;
 
 namespace DBLab2.Common {
     public static class Printer {
@@ -8,6 +9,7 @@ namespace DBLab2.Common {
             Info,
             Success,
             Error,
+            Debug,
         }
 
         private static readonly ImmutableDictionary<MessageTypes, ConsoleColor> Foregrounds =
@@ -15,6 +17,7 @@ namespace DBLab2.Common {
                 [MessageTypes.Info]    = ConsoleColor.White,
                 [MessageTypes.Success] = ConsoleColor.Green,
                 [MessageTypes.Error]   = ConsoleColor.Red,
+                [MessageTypes.Debug]   = ConsoleColor.Gray,
             }.ToImmutableDictionary();
         
         private static readonly ImmutableDictionary<MessageTypes, ConsoleColor> Backgrounds =
@@ -22,6 +25,7 @@ namespace DBLab2.Common {
                 [MessageTypes.Info]    = ConsoleColor.Black,
                 [MessageTypes.Success] = ConsoleColor.Black,
                 [MessageTypes.Error]   = ConsoleColor.Black,
+                [MessageTypes.Debug]   = ConsoleColor.Black,
             }.ToImmutableDictionary();
 
         public static void Info(string template, params object[] args)
@@ -34,9 +38,13 @@ namespace DBLab2.Common {
             => Print(MessageTypes.Error, template, args);
 
         public static void Error(Exception ex, string template) {
-            var temp = string.Concat(template, ex.Message, ex.StackTrace);
+            var temp = string.Concat(template, "\n", ex.Message, "\n", ex.StackTrace);
             Print(MessageTypes.Error, temp);
         }
+
+        [Conditional("DEBUG")]
+        public static void Debug(string template, params object[] args)
+            => Print(MessageTypes.Debug, template, args);
 
         private static void Print(MessageTypes type, string template, params object[] args) {
             var foreTmp = Console.ForegroundColor;
