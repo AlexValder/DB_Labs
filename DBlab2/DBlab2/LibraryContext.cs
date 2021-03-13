@@ -16,6 +16,7 @@ namespace DBlab2 {
         public DbSet<Position> Positions { get; set; }
         public DbSet<TeacherCard> TeacherCards { get; set; }
         public DbSet<LibraryEmployee> LibraryEmployees { get; set; }
+        public DbSet<Table> Tables { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder dbContextOptionsBuilder) {
             dbContextOptionsBuilder.UseSqlite("Data Source=Library.db");

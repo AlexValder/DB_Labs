@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace DBlab2 {
+﻿namespace DBlab2 {
     public class Cathedra {
         public int Id { get; set; }
         public int FacultyId { get; set; }
