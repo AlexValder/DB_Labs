@@ -1,12 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using Microsoft.Data.Sqlite;
+using DBLab2.Common;
 
-namespace DBlab2 {
-    class Program {
-        static void Main(string[] args) {
-            
-            Console.Read();
+namespace DBLab2 {
+    internal static class Program {
+        internal static void Main(string[] args) {
+            SetupConsole();
+
+            Printer.Debug("Debug-only info");
+            Printer.Info("Press any key to exit...");
+            Printer.Error(new Exception("Oh fuck"), ">:(");
+            Console.ReadKey();
+        }
+
+        private static void SetupConsole() {
+            // TODO?
         }
     }
 }
