@@ -9,8 +9,7 @@ namespace DBLab2.ConsoleController.SqlCommands {
             Table = table;
         }
 
-        public SqlSelect(in string table, in List<string> fields) {
-            Table = table;
+        public SqlSelect(in string table, in List<string> fields) : this(table) {
             Fields = fields;
         }
 
@@ -18,6 +17,6 @@ namespace DBLab2.ConsoleController.SqlCommands {
 
         public override string ToString() => $"SELECT {GetSqlFields()} FROM {Table}";
 
-        private string GetSqlFields() => Fields != null ? string.Join(", ", Fields) : "*";
+        private string GetSqlFields() => Fields != null ? string.Join(",", Fields) : "*";
     }
 }
