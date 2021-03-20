@@ -32,23 +32,23 @@ namespace DBLab2.DBLogic {
             return data;
         }
 
-        //Not tested properly
-        public long InsertInto(ISqlCommand command) {
+        public long InsertInto(SqlInsertInto command) {
             var insertCommand = sqlConnection.CreateCommand();
             insertCommand.CommandText = command.Execute();
             var rawid = (long)insertCommand.ExecuteScalar();
             return rawid;
         }
 
-        //Not tested properly
-        public void Remove(ISqlCommand command) {
+        public void Delete(SqlDelete command) {
             var removeCommand = sqlConnection.CreateCommand();
             removeCommand.CommandText = command.Execute();
             removeCommand.ExecuteNonQuery();
         }
 
-        public void Update(ISqlCommand command) {
-            throw new NotImplementedException("This method is not implemented yet.");
+        public void Update(SqlUpdate command) {
+            var updateCommand = sqlConnection.CreateCommand();
+            updateCommand.CommandText = command.Execute();
+            updateCommand.ExecuteNonQuery();
         }
 
         ~SqliteAdapter() {
