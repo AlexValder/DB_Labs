@@ -24,11 +24,13 @@ namespace DBLab2.ConsoleController.SqlCommands {
             $"UPDATE {Table}\n" +
             $"SET {GetFieldValuePairs()}\n" +
             (Condition != null ?
-                $"WHERE {Condition.Value.Item1} {Condition.Value.Item2.ToString()} {Condition.Value.Item3}" :
+                $"WHERE \"{Condition.Value.Item1}\" " +
+                $"{Extension.ToString(Condition.Value.Item2)} " +
+                $"\"{Condition.Value.Item3}\"" :
                 ""
             );
 
         private string GetFieldValuePairs() => string.Join(", ",
-                Set.Select(pair => $"{pair.Item1} = {pair.Item2}"));
+            Set.Select(pair => $"\"{pair.Item1}\" = \"{pair.Item2}\""));
     }
 }

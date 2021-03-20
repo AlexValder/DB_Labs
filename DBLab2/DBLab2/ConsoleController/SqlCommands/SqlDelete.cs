@@ -26,7 +26,9 @@ namespace DBLab2.ConsoleController.SqlCommands {
         public override string ToString() =>
             $"DELETE FROM {Table}" +
             (Condition != null
-                ? $" WHERE {Condition.Value.Item1} {Condition.Value.Item2} {Condition.Value.Item3}"
+                ? $" WHERE \"{Condition.Value.Item1}\" " +
+                  $"{Extension.ToString(Condition.Value.Item2)} " +
+                  $"\"{Condition.Value.Item3}\""
                 : "");
     }
 }

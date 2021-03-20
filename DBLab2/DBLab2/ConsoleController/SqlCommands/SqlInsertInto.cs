@@ -23,8 +23,8 @@ namespace DBLab2.ConsoleController.SqlCommands {
             $"VALUES {GetValues()}";
 
         private string GetFields() =>
-            Fields != null ? $"({string.Join(',', Fields)})" : "";
+            Fields != null ? $"(\"{string.Join("\", \"", Fields)}\")" : "";
 
-        private string GetValues() => $"({string.Join(',', Values)})";
+        private string GetValues() => $"(\"{string.Join("\", \"", Values)}\")";
     }
 }

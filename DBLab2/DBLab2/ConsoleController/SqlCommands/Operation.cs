@@ -18,7 +18,7 @@ namespace DBLab2.ConsoleController.SqlCommands {
     /// Extension methods to quickly convert from enum to string representation and vice versa
     /// </summary>
     public static class Extension {
-        public static Operation ToOperation(this string @value) => @value switch {
+        public static Operation ToOperation(string @value) => @value switch {
             "=" => Operation.Equal,
             "<" => Operation.Less,
             ">" => Operation.Greater,
@@ -28,7 +28,7 @@ namespace DBLab2.ConsoleController.SqlCommands {
             _ => throw new NotSupportedException()
         };
 
-        public static string ToString(this Operation @op) => @op switch {
+        public static string ToString(Operation @op) => @op switch {
             Operation.Equal => "=",
             Operation.Less => "<",
             Operation.Greater => ">",
