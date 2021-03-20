@@ -1,6 +1,10 @@
 using System;
 
 namespace DBLab2.ConsoleController.SqlCommands {
+    
+    /// <summary>
+    /// Used for Condition field in <see cref="SqlUpdate"/> and <see cref="SqlDelete"/> classes.
+    /// </summary>
     public enum Operation {
         Equal,
         Less,
@@ -10,6 +14,9 @@ namespace DBLab2.ConsoleController.SqlCommands {
         NonEqual,
     }
 
+    /// <summary>
+    /// Extension methods to quickly convert from enum to string representation and vice versa
+    /// </summary>
     public static class Extension {
         public static Operation ToOperation(this string @value) => @value switch {
             "=" => Operation.Equal,

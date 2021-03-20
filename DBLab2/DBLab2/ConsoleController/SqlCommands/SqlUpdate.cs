@@ -1,16 +1,18 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 
-namespace DBLab2.ConsoleController.SqlCommands { 
-        public class SqlUpdate : SqlCommand {
+namespace DBLab2.ConsoleController.SqlCommands {
+    
+    /// <summary>
+    /// Represents SQL command UPDATE %table_name% SET field1 = value1, ... (WHERE %condition%) 
+    /// </summary>
+    public class SqlUpdate : SqlCommand {
         public List<(string, string)> Set { get; }
         public (string, Operation, string)? Condition { get; }
 
         public SqlUpdate(in string table, in List<(string, string)> set) : base(table) {
-            Set = set;
+            Set = set ?? throw new ArgumentNullException(nameof(set));
         }
 
         public SqlUpdate(in string table, in List<(string, string)> set, in (string, Operation, string) cond)

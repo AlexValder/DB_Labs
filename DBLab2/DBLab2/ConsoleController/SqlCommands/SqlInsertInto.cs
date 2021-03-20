@@ -1,6 +1,10 @@
 using System.Collections.Generic;
 
 namespace DBLab2.ConsoleController.SqlCommands {
+    
+    /// <summary>
+    /// Represents SQL command INSERT INTO %table_name% (field1, field2, ...) VALUES (value1, value2, ...)
+    /// </summary>
     public class SqlInsertInto : SqlCommand {
         public List<string> Values { get; }
         public List<string>? Fields { get; }
