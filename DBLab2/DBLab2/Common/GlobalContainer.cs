@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 
-namespace DBlab2.Common {
+namespace DBLab2.Common {
     static class GlobalContainer {
         private static readonly ImmutableDictionary<string, string[]> DictOfLists
-            = new Dictionary<string, string[]>(StringComparer.InvariantCultureIgnoreCase) {
+            = new Dictionary<string, string[]> {
                 ["Author"] = new[] {
                     "FirstName",
                     "LastName",
@@ -74,7 +74,7 @@ namespace DBlab2.Common {
                     "LibraryEmployeeId",
                     "BookId",
                 },
-            }.ToImmutableDictionary();
+            }.ToImmutableDictionary(StringComparer.InvariantCultureIgnoreCase);
 
         public static bool TableExists(string tableName) => DictOfLists.Keys.Contains(tableName);
 
