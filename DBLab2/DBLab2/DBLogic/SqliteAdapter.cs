@@ -6,7 +6,7 @@ using Microsoft.Data.Sqlite;
 using DBLab2.ConsoleController.SqlCommands;
 
 namespace DBLab2.DBLogic {
-    public sealed class SqliteAdapter {
+    public static class SqliteAdapter {
         private static SqliteConnection sqlConnection;
 
         static SqliteAdapter() {
@@ -15,7 +15,7 @@ namespace DBLab2.DBLogic {
 
         private static void Check() {
             if (sqlConnection is null) {
-                throw new NullReferenceException("SQL connection is not set.");
+                throw new MemberAccessException("SQL connection is not set. Call 'SetDatabase before using any other method.'");
             }
         }
 
