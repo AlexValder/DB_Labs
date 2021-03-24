@@ -7,17 +7,39 @@ using DBLab2.ConsoleController.SqlCommands;
 
 namespace DBLab2.DBLogic {
     public sealed class SqliteAdapter {
-        private SqliteConnection sqlConnection;
+        private static SqliteConnection sqlConnection;
 
-        public SqliteAdapter(string databasePath) {
+        static SqliteAdapter() {
+            sqlConnection = null;
+        }
+
+        private static void Check() {
+            if (sqlConnection is null) {
+                throw new NullReferenceException("SQL connection is not set.");
+            }
+        }
+
+        /// <summary>
+        /// Sets the database to operate with.
+        /// </summary>
+        /// <param name="databasePath">Path to an EXISTING database.</param>
+        public static void SetDatabase(string databasePath) {
+            if (sqlConnection is not null) {
+                sqlConnection.Dispose();
+            }
             sqlConnection = new SqliteConnection($"Data Source = {databasePath}");
             sqlConnection.Open();
         }
 
-        public List<List<string>> Query(SqlSelect command) {
-            var selectCommand = sqlConnection.CreateCommand();
+        /// <summary>
+        /// Selects the data from database.
+        /// </summary>
+        /// <param name="command"> Select command containing data and fields to return. </param>
+        /// <returns>List of list of strings. It represents the following format: *field* : *property1* *property2* ... </returns>
+        public static List<List<string>> Select(SqlSelect command) {
+            Check();
             var data = new List<List<string>>();
-
+            var selectCommand = sqlConnection.CreateCommand();
             selectCommand.CommandText = command.Execute();
 
             using (var reader = selectCommand.ExecuteReader()) {
@@ -32,27 +54,37 @@ namespace DBLab2.DBLogic {
             return data;
         }
 
-        public long InsertInto(SqlInsertInto command) {
+        /// <summary>
+        /// Inserts some data to the database.
+        /// </summary>
+        /// <param name="command">Insert command with the data to insert.</param>
+        public static void InsertInto(SqlInsertInto command) {
+            Check();            
             var insertCommand = sqlConnection.CreateCommand();
             insertCommand.CommandText = command.Execute();
-            var rawid = (long)insertCommand.ExecuteScalar();
-            return rawid;
+            insertCommand.ExecuteScalar();
         }
 
-        public void Delete(SqlDelete command) {
+        /// <summary>
+        /// Deletes data from the database
+        /// </summary>
+        /// <param name="command">Params on what to delete.</param>
+        public static void Delete(SqlDelete command) {
+            Check();
             var removeCommand = sqlConnection.CreateCommand();
             removeCommand.CommandText = command.Execute();
             removeCommand.ExecuteNonQuery();
         }
 
-        public void Update(SqlUpdate command) {
+        /// <summary>
+        /// Updated data in the database
+        /// </summary>
+        /// <param name="command">Update command with specified data and fields to update.</param>
+        public static void Update(SqlUpdate command) {
+            Check();
             var updateCommand = sqlConnection.CreateCommand();
             updateCommand.CommandText = command.Execute();
             updateCommand.ExecuteNonQuery();
-        }
-
-        ~SqliteAdapter() {
-            sqlConnection.Dispose();
         }
     }
 }
