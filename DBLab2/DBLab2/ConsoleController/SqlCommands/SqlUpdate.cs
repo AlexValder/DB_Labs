@@ -8,29 +8,30 @@ namespace DBLab2.ConsoleController.SqlCommands {
     /// Represents SQL command UPDATE %table_name% SET field1 = value1, ... (WHERE %condition%) 
     /// </summary>
     public class SqlUpdate : SqlCommand {
-        public List<(string, string)> Set { get; }
-        public (string, Operation, string)? Condition { get; }
+        public IEnumerable<(string, string)> Set { get; }
+        public IEnumerable<(string, Operation, string)>? Conditions { get; }
 
-        public SqlUpdate(in string table, in List<(string, string)> set) : base(table) {
+        public SqlUpdate(in string table, in IEnumerable<(string, string)> set) : base(table) {
             Set = set ?? throw new ArgumentNullException(nameof(set));
         }
 
-        public SqlUpdate(in string table, in List<(string, string)> set, in (string, Operation, string) cond)
+        public SqlUpdate(in string table,
+            in IEnumerable<(string, string)> set,
+            in IEnumerable<(string, Operation, string)> cond)
             : this(table, set) {
-            Condition = cond;
+            Conditions = cond;
         }
 
         public override string ToString() =>
             $"UPDATE {Table}\n" +
             $"SET {GetFieldValuePairs()}\n" +
-            (Condition != null ?
-                $"WHERE \"{Condition.Value.Item1}\" " +
-                $"{Extension.ToString(Condition.Value.Item2)} " +
-                $"\"{Condition.Value.Item3}\"" :
-                ""
-            );
+            (Conditions != null ? $"WHERE {GetConditions()}" : "");
 
         private string GetFieldValuePairs() => string.Join(", ",
             Set.Select(pair => $"\"{pair.Item1}\" = \"{pair.Item2}\""));
+
+        private string GetConditions() => string.Join(", ",
+            Conditions!.Select(pair
+                => $"\"{pair.Item1}\" {Extension.ToString(pair.Item2)} \"{pair.Item3}\""));
     }
 }

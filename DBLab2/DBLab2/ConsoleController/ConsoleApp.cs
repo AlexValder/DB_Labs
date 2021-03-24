@@ -8,10 +8,11 @@ namespace DBLab2.ConsoleController {
         private static readonly ImmutableDictionary<string, Action> Actions =
             new Dictionary<string, Action> {
             ["SELECT"] = () => { SqlParser.ParseSelect(_input); },
-            ["ADD"]    = () => { SqlParser.ParseAdd(_input); },
+            ["UPDATE"] = () => { SqlParser.ParseUpdate(_input); },
             ["INSERT"] = () => { SqlParser.ParseInsert(_input); },
             ["DELETE"] = () => { SqlParser.ParseDelete(_input); },
-            ["Exit"]   = () => { _exit = true; }
+            ["help"]   = () => { Printer.Info("We're sorry :(");},
+            ["exit"]   = () => { _exit = true; }
         }.ToImmutableDictionary(StringComparer.OrdinalIgnoreCase);
         
         private static bool _exit;
@@ -29,10 +30,15 @@ namespace DBLab2.ConsoleController {
 
                 string input;
                 try {
-                    input = _input[0.._input.IndexOf(' ')] ?? string.Empty;
+                    if (_input.Contains(' ')) {
+                        input = _input[0.._input.IndexOf(' ')] ?? string.Empty;
+                    }
+                    else {
+                        input = _input;
+                    }
                 }
                 catch {
-                    input = "";
+                    input = string.Empty;
                 }
 
                 if (Actions.ContainsKey(input)) {
