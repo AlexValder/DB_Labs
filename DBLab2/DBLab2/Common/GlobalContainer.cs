@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using Microsoft.VisualBasic.CompilerServices;
 
 namespace DBLab2.Common {
-    static class GlobalContainer {
+    internal static class GlobalContainer {
         private static readonly StringComparer Comparer = StringComparer.InvariantCultureIgnoreCase;
-        
+
         private static readonly ImmutableDictionary<string, string[]> DictOfLists
             = new Dictionary<string, string[]>(Comparer) {
                 ["Author"] = new[] {
@@ -79,12 +78,24 @@ namespace DBLab2.Common {
                 },
             }.ToImmutableDictionary(Comparer);
 
-        public static bool TableExists(string tableName) => DictOfLists.Keys.Contains(tableName, Comparer);
+        public static int TableCount => DictOfLists.Count;
 
-        public static bool FieldExists(string tableName, string field)
+        public static int FieldCount(string tableName)
+            => TableExists(tableName) ? DictOfLists[tableName].Length : 0;
+
+        public static IReadOnlyList<string> Tables => DictOfLists.Keys.ToImmutableList();
+
+        public static IReadOnlyList<string> Fields(string tableName)
+            => DictOfLists.ContainsKey(tableName)
+                ? DictOfLists[tableName].ToImmutableList()
+                : Array.Empty<string>().ToImmutableList();
+
+        public static bool TableExists(string tableName) => DictOfLists.ContainsKey(tableName);
+
+        public static bool FieldExists(string tableName, in string field)
             => TableExists(tableName) && DictOfLists[tableName].Contains(field, Comparer);
 
-        public static bool FieldsExist(string tableName, IEnumerable<string> fields)
+        public static bool FieldsExist(string tableName, in IEnumerable<string> fields)
             => fields.All((string field) => FieldExists(tableName, field));
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
 using DBLab2.Common;
 
 namespace DBLab2.ConsoleController {
@@ -11,17 +12,19 @@ namespace DBLab2.ConsoleController {
             ["UPDATE"] = () => { SqlParser.ParseUpdate(_input); },
             ["INSERT"] = () => { SqlParser.ParseInsert(_input); },
             ["DELETE"] = () => { SqlParser.ParseDelete(_input); },
-            ["help"]   = () => { Printer.Info("We're sorry :(");},
+            ["list"]   = ListTables,
+            ["show"]   = ShowFields,
+            ["help"]   = PrintHelp,
             ["exit"]   = () => { _exit = true; }
         }.ToImmutableDictionary(StringComparer.OrdinalIgnoreCase);
-        
+
         private static bool _exit;
         private static string _input = "";
 
         public static void Run() {
             MainLoop();
         }
-        
+
         private static void MainLoop() {
             while (!_exit) {
                 Printer.Info("Enter command: ");
@@ -48,6 +51,30 @@ namespace DBLab2.ConsoleController {
                     Printer.Error("Invalid command");
                 }
             }
+        }
+
+        private static void ListTables() {
+            Console.WriteLine();
+            Printer.Info("AVAILABLE TABLES:");
+            Console.WriteLine(string.Join("\n", GlobalContainer.Tables));
+            Console.WriteLine();
+        }
+
+        private static void ShowFields() {
+            Console.WriteLine();
+            Printer.Info("Enter table name:");
+            var name = Console.ReadLine() ?? string.Empty;
+            if (!GlobalContainer.TableExists(name)) {
+                Printer.Error("No such table");
+                return;
+            }
+            Console.Write("\n\t");
+            Console.WriteLine(string.Join("\n\t", GlobalContainer.Fields(name)));
+            Console.WriteLine();
+        }
+
+        private static void PrintHelp() {
+            Console.WriteLine("We're (not) sorry");
         }
     }
 }
