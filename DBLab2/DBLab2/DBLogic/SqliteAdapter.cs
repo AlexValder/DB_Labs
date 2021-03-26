@@ -7,14 +7,14 @@ using DBLab2.ConsoleController.SqlCommands;
 
 namespace DBLab2.DBLogic {
     public static class SqliteAdapter {
-        private static SqliteConnection sqlConnection;
+        private static SqliteConnection? _sqlConnection;
 
         static SqliteAdapter() {
-            sqlConnection = null;
+            _sqlConnection = null;
         }
 
         private static void Check() {
-            if (sqlConnection is null) {
+            if (_sqlConnection is null) {
                 throw new MemberAccessException("SQL connection is not set. Call 'SetDatabase before using any other method.'");
             }
         }
@@ -24,11 +24,9 @@ namespace DBLab2.DBLogic {
         /// </summary>
         /// <param name="databasePath">Path to an EXISTING database.</param>
         public static void SetDatabase(string databasePath) {
-            if (sqlConnection is not null) {
-                sqlConnection.Dispose();
-            }
-            sqlConnection = new SqliteConnection($"Data Source = {databasePath}");
-            sqlConnection.Open();
+            _sqlConnection?.Dispose();
+            _sqlConnection = new SqliteConnection($"Data Source = {databasePath}");
+            _sqlConnection.Open();
         }
 
         /// <summary>
@@ -39,18 +37,21 @@ namespace DBLab2.DBLogic {
         public static List<List<string>> Select(SqlSelect command) {
             Check();
             var data = new List<List<string>>();
-            var selectCommand = sqlConnection.CreateCommand();
+            var selectCommand = _sqlConnection!.CreateCommand();
             selectCommand.CommandText = command.Execute();
 
-            using (var reader = selectCommand.ExecuteReader()) {
-                while (reader.Read()) {
-                    var tmp = new List<string>();
+            using var reader = selectCommand.ExecuteReader();
+            while (reader.Read()) {
+                var tmp = new List<string>();
+                if (command.Fields != null) {
                     for (int c = 0; c < command.Fields.Count; c++) {
                         tmp.Add(reader.GetString(c));
                     }
-                    data.Add(tmp);
                 }
+
+                data.Add(tmp);
             }
+
             return data;
         }
 
@@ -59,8 +60,8 @@ namespace DBLab2.DBLogic {
         /// </summary>
         /// <param name="command">Insert command with the data to insert.</param>
         public static void InsertInto(SqlInsertInto command) {
-            Check();            
-            var insertCommand = sqlConnection.CreateCommand();
+            Check();
+            var insertCommand = _sqlConnection!.CreateCommand();
             insertCommand.CommandText = command.Execute();
             insertCommand.ExecuteScalar();
         }
@@ -71,7 +72,7 @@ namespace DBLab2.DBLogic {
         /// <param name="command">Params on what to delete.</param>
         public static void Delete(SqlDelete command) {
             Check();
-            var removeCommand = sqlConnection.CreateCommand();
+            var removeCommand = _sqlConnection!.CreateCommand();
             removeCommand.CommandText = command.Execute();
             removeCommand.ExecuteNonQuery();
         }
@@ -82,7 +83,7 @@ namespace DBLab2.DBLogic {
         /// <param name="command">Update command with specified data and fields to update.</param>
         public static void Update(SqlUpdate command) {
             Check();
-            var updateCommand = sqlConnection.CreateCommand();
+            var updateCommand = _sqlConnection!.CreateCommand();
             updateCommand.CommandText = command.Execute();
             updateCommand.ExecuteNonQuery();
         }
