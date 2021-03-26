@@ -29,7 +29,9 @@ namespace DBLab2.ConsoleController {
             while (!_exit) {
                 Printer.Info("Enter command: ");
                 _input = Console.ReadLine() ?? string.Empty;
-                if (_input == string.Empty) continue;
+                if (_input == string.Empty) {
+                    continue;
+                }
 
                 string input;
                 try {

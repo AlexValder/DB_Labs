@@ -11,7 +11,7 @@ namespace DBLab2 {
                 Console.Read();
             }
             else {
-                ;
+                // TBA: GUI Application
             }
         }
     }

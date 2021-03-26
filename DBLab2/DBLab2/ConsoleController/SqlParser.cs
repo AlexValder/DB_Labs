@@ -94,45 +94,42 @@ namespace DBLab2.ConsoleController {
             SqlUpdate command;
             var sets = words[3].Split(',', OPTIONS);
 
-            switch (sets.Length) {
-                case 0:
-                    Printer.Error("Failed to read new values");
-                    return;
-                default:
-                    var setList = new List<(string, string)>();
-                    foreach (var set in sets) {
-                        var opInd = set.IndexOf('=');
-                        if (opInd < 0 || opInd >= set.Length) {
-                            Printer.Error("Invalid set statement");
-                            return;
-                        }
-
-                        var col = set[..opInd] ?? string.Empty;
-                        var val = set[(opInd + 1)..] ?? string.Empty;
-
-                        if (!GlobalContainer.FieldExists(words[1], col)) {
-                            Printer.Error("Invalid field: {0}", col);
-                            return;
-                        }
-
-                        setList.Add((col, val));
+            if (sets.Length == 0) {
+                Printer.Error("Failed to read new values");
+                return;
+            }
+            else {
+                var setList = new List<(string, string)>();
+                foreach (var set in sets) {
+                    var opInd = set.IndexOf('=');
+                    if (opInd < 0 || opInd >= set.Length) {
+                        Printer.Error("Invalid set statement");
+                        return;
                     }
 
-                    if (words.Length > 5 && "where".Equals(words[4], STR_COMPARISON))
-                    {
-                        if (TryParseCondition(words[1], words[5], out var condList)) {
-                            command = new SqlUpdate(words[1], setList, condList);
-                        }
-                        else {
-                            Printer.Error("Invalid conditions.");
-                            return;
-                        }
+                    var col = set[..opInd] ?? string.Empty;
+                    var val = set[(opInd + 1)..] ?? string.Empty;
+
+                    if (!GlobalContainer.FieldExists(words[1], col)) {
+                        Printer.Error("Invalid field: {0}", col);
+                        return;
+                    }
+
+                    setList.Add((col, val));
+                }
+
+                if (words.Length > 5 && "where".Equals(words[4], STR_COMPARISON)) {
+                    if (TryParseCondition(words[1], words[5], out var condList)) {
+                        command = new SqlUpdate(words[1], setList, condList);
                     }
                     else {
-                        command = new SqlUpdate(words[1], setList);
+                        Printer.Error("Invalid conditions.");
+                        return;
                     }
-
-                    break;
+                }
+                else {
+                    command = new SqlUpdate(words[1], setList);
+                }
             }
 
             Printer.Success(command.Execute());
@@ -214,11 +211,6 @@ namespace DBLab2.ConsoleController {
             var words = betterInput.Split(' ', OPTIONS);
 
             switch (words.Length) {
-                case <= 2:
-                case 4:
-                case >= 6:
-                    Printer.Error("Invalid command format");
-                    return;
                 case 3:
                 case 5:
                     if (!"from".Equals(words[1], STR_COMPARISON)) {
@@ -266,6 +258,9 @@ namespace DBLab2.ConsoleController {
 
                     Printer.Success(command.Execute());
                     break;
+                default:
+                    Printer.Error("Invalid command format");
+                    return;
             }
         }
 
