@@ -117,21 +117,20 @@ namespace DBLab2.Common {
         public static string BdSelected { get; private set; } = "None";
         public static int TableCount => DictOfLists?.Count ?? 0;
 
-        public static int FieldCount(string tableName)
-            => TableExists(tableName) ? DictOfLists![tableName].Length : 0;
+        public static int FieldCount(string tableName) => DictOfLists?[tableName].Length ?? 0;
 
         public static IEnumerable<string> Tables =>
             (DictOfLists?.Keys ?? new List<string>()).ToImmutableList();
 
         public static IEnumerable<string> Fields(string tableName)
-            => DictOfLists != null && DictOfLists.ContainsKey(tableName)
-                ? DictOfLists[tableName].ToImmutableList()
+            => TableExists(tableName)
+                ? DictOfLists![tableName].ToImmutableList()
                 : Array.Empty<string>().ToImmutableList();
 
-        public static bool TableExists(string tableName) => DictOfLists != null && DictOfLists.ContainsKey(tableName);
+        public static bool TableExists(string tableName) => DictOfLists?.ContainsKey(tableName) ?? false;
 
         public static bool FieldExists(string tableName, in string field)
-            => TableExists(tableName) && DictOfLists![tableName].Contains(field, Comparer);
+            => DictOfLists?[tableName].Contains(field, Comparer) ?? false;
 
         public static bool FieldsExist(string tableName, in IEnumerable<string> fields)
             => fields.All((string field) => FieldExists(tableName, field));

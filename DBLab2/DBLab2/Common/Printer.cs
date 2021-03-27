@@ -37,9 +37,9 @@ namespace DBLab2.Common {
         public static void Error(string template, params object[] args)
             => Print(MessageTypes.Error, template, args);
 
-        public static void Error(Exception? ex, string template) {
+        public static void Error(Exception? ex, string template, params  object[] args) {
             var temp = string.Concat(template, "\n", ex?.Message, "\n", ex?.StackTrace);
-            Print(MessageTypes.Error, temp);
+            Print(MessageTypes.Error, temp, args);
         }
 
         [Conditional("DEBUG")]
