@@ -69,9 +69,7 @@ namespace DBLab2.ConsoleController {
 
             Printer.Success(command.Execute());
             var @return = SqliteAdapter.Select(command);
-            foreach (var list in @return) {
-                Printer.Debug(list);
-            }
+            Printer.PrintTable(@return);
         }
 
         /// <summary>
