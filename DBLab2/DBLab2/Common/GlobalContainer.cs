@@ -133,6 +133,6 @@ namespace DBLab2.Common {
             => DictOfLists?[tableName].Contains(field, Comparer) ?? false;
 
         public static bool FieldsExist(string tableName, in IEnumerable<string> fields)
-            => fields.All((string field) => FieldExists(tableName, field));
+            => fields.All(field => FieldExists(tableName, field));
     }
 }
