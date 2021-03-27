@@ -44,7 +44,12 @@ namespace DBLab2.DBLogic {
             while (reader.Read()) {
                 var tmp = new List<string>();
                 if (command.Fields != null) {
-                    for (int c = 0; c < command.Fields.Count; c++) {
+                    for (int c = 0; c < command.Fields.Count(); c++) {
+                        tmp.Add(reader.GetString(c));
+                    }
+                }
+                else {
+                    for (int c = 0; c < reader.FieldCount; c++) {
                         tmp.Add(reader.GetString(c));
                     }
                 }

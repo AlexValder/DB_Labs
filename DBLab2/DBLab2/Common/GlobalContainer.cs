@@ -1,62 +1,75 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.IO;
 using System.Linq;
 
 namespace DBLab2.Common {
     internal static class GlobalContainer {
         private static readonly StringComparer Comparer = StringComparer.InvariantCultureIgnoreCase;
 
-        private static readonly ImmutableDictionary<string, string[]> DictOfLists
+        private static ImmutableDictionary<string, string[]>? DictOfLists
             = new Dictionary<string, string[]>(Comparer) {
-                ["Author"] = new[] {
+                ["Authors"] = new[] {
+                    "Id",
                     "FirstName",
                     "LastName",
                 },
-                ["Book"] = new[] {
+                ["Books"] = new[] {
+                    "Id",
                     "Title",
                     "Year",
                     "PublisherId",
                 },
-                ["BookAuthor"] = new[] {
+                ["BookAuthors"] = new[] {
+                    "Id",
                     "BookId",
                     "AuthorId",
                 },
-                ["Cathedra"] = new[] {
+                ["Cathedras"] = new[] {
+                    "Id",
                     "FacultyId",
                     "Name",
                 },
-                ["Faculty"] = new[] {
+                ["Faculties"] = new[] {
+                    "Id",
                     "Name",
                 },
-                ["Group"] = new[] {
+                ["Groups"] = new[] {
+                    "Id",
                     "Number",
                     "SpecialityId",
                     "CathedraId",
                 },
-                ["LibraryEmployee"] = new[] {
+                ["LibraryEmployees"] = new[] {
+                    "Id",
                     "FirstName",
                     "LastName",
                     "PositionId",
                 },
-                ["Position"] = new[] {
+                ["Positions"] = new[] {
+                    "Id",
                     "PosName",
                 },
-                ["Publisher"] = new[] {
+                ["Publishers"] = new[] {
+                    "Id",
                     "Name"
                 },
-                ["Speciality"] = new[] {
+                ["Specialities"] = new[] {
+                    "Id",
                     "Name",
                     "Number",
                     "FacultyId",
                 },
-                ["Student"] = new[] {
+                ["Students"] = new[] {
+                    "Id",
                     "FirstName",
                     "LastName",
                     "Year",
                     "GroupId",
                 },
-                ["StudentCard"] = new[] {
+                ["StudentCards"] = new[] {
+                    "Id",
                     "StudentId",
                     "TakenDate",
                     "DueDate",
@@ -64,12 +77,14 @@ namespace DBLab2.Common {
                     "BookId",
                     "LibraryEmployeeId",
                 },
-                ["Teacher"] = new[] {
+                ["Teachers"] = new[] {
+                    "Id",
                     "FirstName",
                     "SecondName",
                     "CathedraId",
                 },
-                ["TeacherCard"] = new[] {
+                ["TeacherCards"] = new[] {
+                    "Id",
                     "TeacherId",
                     "TakenDate",
                     "ReturnedDate",
@@ -78,22 +93,45 @@ namespace DBLab2.Common {
                 },
             }.ToImmutableDictionary(Comparer);
 
-        public static int TableCount => DictOfLists.Count;
+        public static bool TryLoadDb(string path) {
+            var backup1 = DictOfLists;
+            var backup2 = BdSelected;
+            try {
+                // 1. Try to find file in `path`
+                // 2. Verify it's an actual DB
+                // 3. Create a Dictionary with
+                // tables and their fields in this
+                // database
+                BdSelected = Path.GetFileName(path);
+            }
+            catch (Exception ex) {
+                DictOfLists = backup1;
+                BdSelected = backup2;
+                Printer.Error(ex, "Failed to load DB");
+                return false;
+            }
+
+            return true;
+        }
+
+        public static string BdSelected { get; private set; } = "None";
+        public static int TableCount => DictOfLists?.Count ?? 0;
 
         public static int FieldCount(string tableName)
-            => TableExists(tableName) ? DictOfLists[tableName].Length : 0;
+            => TableExists(tableName) ? DictOfLists![tableName].Length : 0;
 
-        public static IReadOnlyList<string> Tables => DictOfLists.Keys.ToImmutableList();
+        public static IEnumerable<string> Tables =>
+            (DictOfLists?.Keys ?? new List<string>()).ToImmutableList();
 
-        public static IReadOnlyList<string> Fields(string tableName)
-            => DictOfLists.ContainsKey(tableName)
+        public static IEnumerable<string> Fields(string tableName)
+            => DictOfLists != null && DictOfLists.ContainsKey(tableName)
                 ? DictOfLists[tableName].ToImmutableList()
                 : Array.Empty<string>().ToImmutableList();
 
-        public static bool TableExists(string tableName) => DictOfLists.ContainsKey(tableName);
+        public static bool TableExists(string tableName) => DictOfLists != null && DictOfLists.ContainsKey(tableName);
 
         public static bool FieldExists(string tableName, in string field)
-            => TableExists(tableName) && DictOfLists[tableName].Contains(field, Comparer);
+            => TableExists(tableName) && DictOfLists![tableName].Contains(field, Comparer);
 
         public static bool FieldsExist(string tableName, in IEnumerable<string> fields)
             => fields.All((string field) => FieldExists(tableName, field));

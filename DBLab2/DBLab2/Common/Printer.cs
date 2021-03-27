@@ -19,7 +19,7 @@ namespace DBLab2.Common {
                 [MessageTypes.Error]   = ConsoleColor.Red,
                 [MessageTypes.Debug]   = ConsoleColor.Gray,
             }.ToImmutableDictionary();
-        
+
         private static readonly ImmutableDictionary<MessageTypes, ConsoleColor> Backgrounds =
             new Dictionary<MessageTypes, ConsoleColor> {
                 [MessageTypes.Info]    = ConsoleColor.Black,
@@ -37,8 +37,8 @@ namespace DBLab2.Common {
         public static void Error(string template, params object[] args)
             => Print(MessageTypes.Error, template, args);
 
-        public static void Error(Exception ex, string template) {
-            var temp = string.Concat(template, "\n", ex.Message, "\n", ex.StackTrace);
+        public static void Error(Exception? ex, string template) {
+            var temp = string.Concat(template, "\n", ex?.Message, "\n", ex?.StackTrace);
             Print(MessageTypes.Error, temp);
         }
 
