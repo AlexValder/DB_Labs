@@ -13,11 +13,11 @@ namespace DBLab2.ConsoleController {
               "To execute supported SQL commands (SELECT, INSERT INTO, UPDATE, DELETE), " +
               "just type the command into the command prompt.\n" +
               "Available commands:\n" +
-              "load <path> - load another DB-file;" +
-              "list - prints names of all available tables;\n" +
-              "list <table> - prints names of fields in the table;\n" +
-              "help - you're here!\n" +
-              "exit - close the application.\n\n" +
+              "load <path>\t- load another DB-file;\n" +
+              "list\t\t- prints names of all available tables;\n" +
+              "show <table>\t- prints names of fields in the table;\n" +
+              "help\t\t- you're here!\n" +
+              "exit\t\t- close the application.\n\n" +
               "Command syntax:\n\n" +
               "- SELECT:\n" +
               "\tSELECT <fields> FROM <table>\n" +
