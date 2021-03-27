@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 
-namespace DBlab2.Common {
-    static class GlobalContainer {
+namespace DBLab2.Common {
+    internal static class GlobalContainer {
+        private static readonly StringComparer Comparer = StringComparer.InvariantCultureIgnoreCase;
+
         private static readonly ImmutableDictionary<string, string[]> DictOfLists
-            = new Dictionary<string, string[]>(StringComparer.InvariantCultureIgnoreCase) {
+            = new Dictionary<string, string[]>(Comparer) {
                 ["Author"] = new[] {
                     "FirstName",
                     "LastName",
@@ -74,11 +76,26 @@ namespace DBlab2.Common {
                     "LibraryEmployeeId",
                     "BookId",
                 },
-            }.ToImmutableDictionary();
+            }.ToImmutableDictionary(Comparer);
 
-        public static bool TableExists(string tableName) => DictOfLists.Keys.Contains(tableName);
+        public static int TableCount => DictOfLists.Count;
 
-        public static bool FieldExists(string tableName, string field)
-            => TableExists(tableName) && DictOfLists[tableName].Contains(field);
+        public static int FieldCount(string tableName)
+            => TableExists(tableName) ? DictOfLists[tableName].Length : 0;
+
+        public static IReadOnlyList<string> Tables => DictOfLists.Keys.ToImmutableList();
+
+        public static IReadOnlyList<string> Fields(string tableName)
+            => DictOfLists.ContainsKey(tableName)
+                ? DictOfLists[tableName].ToImmutableList()
+                : Array.Empty<string>().ToImmutableList();
+
+        public static bool TableExists(string tableName) => DictOfLists.ContainsKey(tableName);
+
+        public static bool FieldExists(string tableName, in string field)
+            => TableExists(tableName) && DictOfLists[tableName].Contains(field, Comparer);
+
+        public static bool FieldsExist(string tableName, in IEnumerable<string> fields)
+            => fields.All((string field) => FieldExists(tableName, field));
     }
 }

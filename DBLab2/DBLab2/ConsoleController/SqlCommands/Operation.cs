@@ -3,7 +3,7 @@ using System;
 namespace DBLab2.ConsoleController.SqlCommands {
     
     /// <summary>
-    /// Used for Condition field in <see cref="SqlUpdate"/> and <see cref="SqlDelete"/> classes.
+    /// Used for Conditions field in <see cref="SqlUpdate"/> and <see cref="SqlDelete"/> classes.
     /// </summary>
     public enum Operation {
         Equal,
