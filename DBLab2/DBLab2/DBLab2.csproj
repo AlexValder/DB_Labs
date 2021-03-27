@@ -10,4 +10,11 @@
       <PackageReference Include="Microsoft.Data.Sqlite" Version="5.0.4" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Remove="Library.db" />
+      <Resource Include="Library.db">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+    </ItemGroup>
+
 </Project>

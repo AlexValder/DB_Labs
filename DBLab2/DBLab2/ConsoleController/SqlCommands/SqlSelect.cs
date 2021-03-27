@@ -2,16 +2,16 @@ using System;
 using System.Collections.Generic;
 
 namespace DBLab2.ConsoleController.SqlCommands {
-    
+
     /// <summary>
     /// Represents SQL command SELECT %fields% from %table_name%
     /// </summary>
     public sealed class SqlSelect : SqlCommand {
-        public IEnumerable<string>? Fields { get; }
+        public IList<string>? Fields { get; }
 
         public SqlSelect(in string table) : base(table) {}
 
-        public SqlSelect(in string table, in IEnumerable<string> fields) : this(table) {
+        public SqlSelect(in string table, in IList<string> fields) : this(table) {
             Fields = fields ?? throw new ArgumentNullException(nameof(fields));
         }
 

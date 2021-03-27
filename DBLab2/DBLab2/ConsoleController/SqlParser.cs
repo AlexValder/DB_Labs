@@ -5,6 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using DBLab2.Common;
 using DBLab2.ConsoleController.SqlCommands;
+using DBLab2.DBLogic;
 
 namespace DBLab2.ConsoleController {
     internal static class SqlParser {
@@ -67,6 +68,10 @@ namespace DBLab2.ConsoleController {
             }
 
             Printer.Success(command.Execute());
+            var @return = SqliteAdapter.Select(command);
+            foreach (var list in @return) {
+                Printer.Debug(list);
+            }
         }
 
         /// <summary>
@@ -133,6 +138,7 @@ namespace DBLab2.ConsoleController {
             }
 
             Printer.Success(command.Execute());
+            SqliteAdapter.Update(command);
         }
 
         /// <summary>
@@ -195,6 +201,7 @@ namespace DBLab2.ConsoleController {
                         command = new SqlInsertInto(words[2], vals);
                     }
                     Printer.Success(command.Execute());
+                    SqliteAdapter.InsertInto(command);
                     break;
             }
         }
@@ -257,6 +264,8 @@ namespace DBLab2.ConsoleController {
                     }
 
                     Printer.Success(command.Execute());
+                    SqliteAdapter.Delete(command);
+
                     break;
                 default:
                     Printer.Error("Invalid command format");

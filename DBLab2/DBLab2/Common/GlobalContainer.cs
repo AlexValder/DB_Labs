@@ -1,101 +1,40 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using DBLab2.DBLogic;
 
 namespace DBLab2.Common {
     internal static class GlobalContainer {
         private static readonly StringComparer Comparer = StringComparer.InvariantCultureIgnoreCase;
 
-        private static readonly ImmutableDictionary<string, string[]> DictOfLists
-            = new Dictionary<string, string[]>(Comparer) {
-                ["Author"] = new[] {
-                    "FirstName",
-                    "LastName",
-                },
-                ["Book"] = new[] {
-                    "Title",
-                    "Year",
-                    "PublisherId",
-                },
-                ["BookAuthor"] = new[] {
-                    "BookId",
-                    "AuthorId",
-                },
-                ["Cathedra"] = new[] {
-                    "FacultyId",
-                    "Name",
-                },
-                ["Faculty"] = new[] {
-                    "Name",
-                },
-                ["Group"] = new[] {
-                    "Number",
-                    "SpecialityId",
-                    "CathedraId",
-                },
-                ["LibraryEmployee"] = new[] {
-                    "FirstName",
-                    "LastName",
-                    "PositionId",
-                },
-                ["Position"] = new[] {
-                    "PosName",
-                },
-                ["Publisher"] = new[] {
-                    "Name"
-                },
-                ["Speciality"] = new[] {
-                    "Name",
-                    "Number",
-                    "FacultyId",
-                },
-                ["Student"] = new[] {
-                    "FirstName",
-                    "LastName",
-                    "Year",
-                    "GroupId",
-                },
-                ["StudentCard"] = new[] {
-                    "StudentId",
-                    "TakenDate",
-                    "DueDate",
-                    "ReturnedDate",
-                    "BookId",
-                    "LibraryEmployeeId",
-                },
-                ["Teacher"] = new[] {
-                    "FirstName",
-                    "SecondName",
-                    "CathedraId",
-                },
-                ["TeacherCard"] = new[] {
-                    "TeacherId",
-                    "TakenDate",
-                    "ReturnedDate",
-                    "LibraryEmployeeId",
-                    "BookId",
-                },
-            }.ToImmutableDictionary(Comparer);
+        private static ImmutableDictionary<string, string[]>? _dictOfLists;
 
-        public static int TableCount => DictOfLists.Count;
+        internal static void CacheMetadata(IDictionary<string, string[]> data) {
+            _dictOfLists = data.ToImmutableDictionary(Comparer);
+        }
 
-        public static int FieldCount(string tableName)
-            => TableExists(tableName) ? DictOfLists[tableName].Length : 0;
+        public static string BdSelected { get; internal set; } = "None";
+        public static int TableCount => _dictOfLists?.Count ?? 0;
 
-        public static IReadOnlyList<string> Tables => DictOfLists.Keys.ToImmutableList();
+        public static int FieldCount(string tableName) => _dictOfLists?[tableName].Length ?? 0;
 
-        public static IReadOnlyList<string> Fields(string tableName)
-            => DictOfLists.ContainsKey(tableName)
-                ? DictOfLists[tableName].ToImmutableList()
+        public static IEnumerable<string> Tables =>
+            (_dictOfLists?.Keys ?? new List<string>()).ToImmutableList();
+
+        public static IEnumerable<string> Fields(string tableName)
+            => TableExists(tableName)
+                ? _dictOfLists![tableName].ToImmutableList()
                 : Array.Empty<string>().ToImmutableList();
 
-        public static bool TableExists(string tableName) => DictOfLists.ContainsKey(tableName);
+        public static bool TableExists(string tableName) => _dictOfLists?.ContainsKey(tableName) ?? false;
 
         public static bool FieldExists(string tableName, in string field)
-            => TableExists(tableName) && DictOfLists[tableName].Contains(field, Comparer);
+            => _dictOfLists?[tableName].Contains(field, Comparer) ?? false;
 
         public static bool FieldsExist(string tableName, in IEnumerable<string> fields)
-            => fields.All((string field) => FieldExists(tableName, field));
+            => fields.All(field => FieldExists(tableName, field));
     }
 }
