@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.IO;
 using System.Linq;
 using System.Net;
 using DBLab2.Common;
+using DBLab2.DBLogic;
 
 namespace DBLab2.ConsoleController {
     public static class ConsoleApp {
@@ -74,7 +76,12 @@ namespace DBLab2.ConsoleController {
                 }
 
                 if (Actions.ContainsKey(input)) {
-                    Actions[input].Invoke();
+                    try {
+                        Actions[input].Invoke();
+                    }
+                    catch (Exception ex) {
+                        Printer.Error("Failed to execute command:\n{0}", ex.Message);
+                    }
                 }
                 else {
                     Printer.Error("Invalid command");
@@ -91,21 +98,23 @@ namespace DBLab2.ConsoleController {
 
         private static void ShowFields(string name) {
             Console.WriteLine();
-            if (!GlobalContainer.TableExists(name)) {
-                Printer.Error("No such table: {0}", name);
+            string actualName = name[(name.IndexOf(' ') + 1)..];
+            if (!GlobalContainer.TableExists(actualName)) {
+                Printer.Error("No such table: {0}", actualName);
                 return;
             }
             Console.Write("\n\t");
-            Console.WriteLine(string.Join("\n\t", GlobalContainer.Fields(name)));
+            Console.WriteLine(string.Join("\n\t", GlobalContainer.Fields(actualName)));
             Console.WriteLine();
         }
 
         private static void LoadTable(string input) {
-            // TODO:
-            // 1. Validate input (can it be null?)
-            // 2. Load table into GlobalContainer
-
-            Printer.Info("DB selected: {0}", GlobalContainer.BdSelected);
+            if (SqliteAdapter.TrySetDatabase(input)) {
+                Printer.Success("New database selected: {0}", Path.GetFileName(input));
+            }
+            else {
+                Printer.Error("No new database was selected.");
+            }
         }
     }
 }
