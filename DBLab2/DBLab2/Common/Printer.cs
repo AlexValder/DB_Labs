@@ -70,12 +70,7 @@ namespace DBLab2.Common {
 
             var width = new List<int>();
             for (int i = 0; i < columns; ++i) {
-                width.Add(0);
-                for (int j = 0; j < rows; ++j) {
-                    if (width[i] < data[j][i].Length) {
-                        width[i] = data[j][i].Length;
-                    }
-                }
+                width.Add(data.Max(arg => arg[i].Length));
             }
 
             var tmp = new string[columns];
