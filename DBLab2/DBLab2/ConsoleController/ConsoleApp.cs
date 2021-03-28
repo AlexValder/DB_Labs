@@ -22,17 +22,13 @@ namespace DBLab2.ConsoleController {
               "exit\t\t- close the application.\n\n" +
               "Command syntax:\n\n" +
               "- SELECT:\n" +
-              "\tSELECT <fields> FROM <table>\n" +
-              "\tSELECT * FROM <table>\n" +
+              "\tSELECT <fields> FROM <table> [WHERE <condition>]\n" +
               "- INSERT INTO:\n" +
-              "\tINSERT INTO <table> (column1, column2, ...) VALUES (value1, value2, ...)\n" +
-              "\tINSERT INTO <table> VALUES (value1, value2, ...)\n" +
+              "\tINSERT INTO <table> [(column1, column2, ...)] VALUES (value1, value2, ...}\n" +
               "- UPDATE:\n" +
-              "\tUPDATE <table> SET field1=value1, field2=value2, ... WHERE <condition>\n" +
-              "\tUPDATE <table> SET field1=value1, field2=value2\n" +
+              "\tUPDATE <table> SET field1=value1, field2=value2, ... [WHERE <condition>]\n" +
               "- DELETE:\n" +
-              "\tDELETE FROM <table>\n" +
-              "\tDELETE FROM <table> WHERE <condition>\n\n";
+              "\tDELETE FROM <table> [WHERE <condition>]\n\n";
 
         private static readonly ImmutableDictionary<string, Action> Actions =
             new Dictionary<string, Action> {

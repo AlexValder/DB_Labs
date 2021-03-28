@@ -61,6 +61,41 @@ namespace DBLab2.Common {
         public static void Debug(IEnumerable<string> templates, params object[] args)
             => Print(MessageTypes.Debug, string.Join('\n', templates), args);
 
+        public static void PrintTable(List<List<string>> data) {
+            var rows = data.Count;
+            var columns = data[0]?.Count ?? 0;
+            if (columns == 0 || rows == 0) {
+                return;
+            }
+
+            var width = new List<int>();
+            for (int i = 0; i < columns; ++i) {
+                width.Add(data.Max(arg => arg[i].Length));
+            }
+
+            var tmp = new string[columns];
+            for (int i = 0; i < tmp.Length; ++i) {
+                tmp[i] = new string('-', width[i] + 2);
+            }
+
+            var outerSeparator = new string('=', width.Sum(len => len + 2) + 2 * (width.Count - 1));
+            var innerSeparator = $"+{string.Join('+', tmp)}+";
+
+            Console.WriteLine(outerSeparator);
+            for (int i = 0; i < rows; ++i) {
+                for (int j = 0; j < columns; ++j) {
+                    Console.Write($"| {{0,-{width[j]}}} ", data[i][j]);
+                }
+                Console.WriteLine("|");
+                if (i == 0) {
+                    Console.WriteLine(outerSeparator);
+                } else if (i != rows - 1) {
+                    Console.WriteLine(innerSeparator);
+                }
+            }
+            Console.WriteLine(outerSeparator);
+        }
+
         private static void Print(MessageTypes type, string template, params object[] args) {
             var foreTmp = Console.ForegroundColor;
             var backTmp = Console.BackgroundColor;

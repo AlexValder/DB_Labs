@@ -77,7 +77,7 @@ namespace DBLab2.DBLogic {
         /// </summary>
         /// <param name="command"> Select command containing data and fields to return. </param>
         /// <returns>List of list of strings. It represents the following format: *field* : *property1* *property2* ... </returns>
-        public static IEnumerable<IEnumerable<string>> Select(SqlSelect command) {
+        public static List<List<string>> Select(SqlSelect command) {
             Check();
             var data = new List<List<string>>();
             var selectCommand = _sqlConnection!.CreateCommand();
@@ -92,6 +92,7 @@ namespace DBLab2.DBLogic {
                 data.Add(tmp);
             }
 
+            data.Insert(0, GlobalContainer.Fields(command.Table).ToList());
             return data;
         }
 

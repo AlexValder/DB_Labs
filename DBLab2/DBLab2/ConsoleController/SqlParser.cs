@@ -20,8 +20,7 @@ namespace DBLab2.ConsoleController {
 
         /// <summary>
         /// Parses string in next format:
-        /// `SELECT field1, field2 FROM table`
-        /// `SELECT * FROM table`
+        /// `SELECT fields FROM table (WHERE condition)`
         /// </summary>
         /// <param name="input">input string</param>
         public static void ParseSelect(in string input) {
@@ -29,7 +28,7 @@ namespace DBLab2.ConsoleController {
 
             var words = betterInput.Split(' ', OPTIONS);
 
-            if (words.Length != 4) {
+            if (words.Length != 4 && words.Length != 6) {
                 Printer.Error("Invalid number of words");
                 return;
             }
@@ -52,26 +51,37 @@ namespace DBLab2.ConsoleController {
                     Printer.Error("Failed to read fields");
                     return;
                 case 1 when fields[0] == "*":
-                    command = new SqlSelect(words[3]);
+                    fields = null;
                     break;
                 default: {
-                    if (GlobalContainer.FieldsExist(words[3], fields)) {
-                        command = new SqlSelect(words[3], fields);
-                    }
-                    else {
+                    if (!GlobalContainer.FieldsExist(words[3], fields)) {
                         Printer.Error("Invalid fields.");
                         return;
                     }
-
                     break;
                 }
             }
 
+            if (words.Length == 6) {
+                if (!"where".Equals(words[4], STR_COMPARISON)) {
+                    Printer.Error("Invalid command format");
+                    return;
+                }
+
+                if (!TryParseCondition(words[3], words[5], out var conds)) {
+                    Printer.Error("Failed to parse condition");
+                    return;
+                }
+
+                command = new SqlSelect(words[3], fields, conds);
+            }
+            else {
+                command = new SqlSelect(words[3], fields);
+            }
+
             Printer.Success(command.Execute());
             var @return = SqliteAdapter.Select(command);
-            foreach (var list in @return) {
-                Printer.Debug(list);
-            }
+            Printer.PrintTable(@return);
         }
 
         /// <summary>
