@@ -9,13 +9,15 @@ namespace DBLab2.ConsoleController.SqlCommands {
     public sealed class SqlSelect : SqlCommand {
         public IList<string>? Fields { get; }
 
-        public SqlSelect(in string table) : base(table) {}
-
-        public SqlSelect(in string table, in IList<string> fields) : this(table) {
-            Fields = fields ?? throw new ArgumentNullException(nameof(fields));
+        public SqlSelect(in string table,
+            in IList<string>? fields = null,
+            in IList<(string, Operation, string)>? conditions = null) : base(table, conditions) {
+            Fields = fields;
         }
 
-        public override string ToString() => $"SELECT {GetSqlFields()} FROM {Table}";
+        public override string ToString()
+            => $"SELECT {GetSqlFields()} FROM {Table}" +
+               (Conditions != null ? $"\nWHERE {GetConditions()}" : "");
 
         private string GetSqlFields() => Fields != null ? string.Join(",", Fields) : "*";
     }

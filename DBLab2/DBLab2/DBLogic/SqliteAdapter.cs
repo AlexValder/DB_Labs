@@ -92,6 +92,7 @@ namespace DBLab2.DBLogic {
                 data.Add(tmp);
             }
 
+            data.Insert(0, GlobalContainer.Fields(command.Table).ToList());
             return data;
         }
 

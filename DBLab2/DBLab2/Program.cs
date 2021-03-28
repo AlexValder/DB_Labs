@@ -12,11 +12,16 @@ namespace DBLab2 {
 
             AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
 
+            bool success;
             if (args.Length >= 1 && File.Exists(args[0])) {
-                SqliteAdapter.TrySetDatabase(args[0]);
+                success = SqliteAdapter.TrySetDatabase(args[0]);
             }
             else {
-                SqliteAdapter.TrySetDatabase(DefaultLibraryDb);
+                success = SqliteAdapter.TrySetDatabase(DefaultLibraryDb);
+            }
+
+            if (!success) {
+                Printer.Error("Failed to load DB.");
             }
 
             if (args.Length < 2 || args[1].Equals("console", StringComparison.InvariantCultureIgnoreCase)) {
