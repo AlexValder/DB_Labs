@@ -12,9 +12,9 @@
 
     <ItemGroup>
       <None Remove="Library.db" />
-      <Resource Include="Library.db">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Resource>
+      <Content Include="Library.db">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
 </Project>
