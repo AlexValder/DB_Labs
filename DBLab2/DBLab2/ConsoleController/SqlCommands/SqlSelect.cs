@@ -9,9 +9,15 @@ namespace DBLab2.ConsoleController.SqlCommands {
     public sealed class SqlSelect : SqlCommand {
         public IList<string>? Fields { get; }
 
+        public SqlSelect(in string table) : base(table) {}
+
+        public SqlSelect(in string table, in IList<string> fields) : base(table) {
+            Fields = fields;
+        }
+
         public SqlSelect(in string table,
-            in IList<string>? fields = null,
-            in IList<(string, Operation, string)>? conditions = null) : base(table, conditions) {
+            in IList<string>? fields,
+            in IList<(string, Operation, string)> conditions) : base(table, conditions) {
             Fields = fields;
         }
 
