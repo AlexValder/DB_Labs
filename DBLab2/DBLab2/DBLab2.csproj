@@ -13,7 +13,7 @@
     <ItemGroup>
       <None Remove="Library.db" />
       <Content Include="Library.db">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Content>
     </ItemGroup>
 

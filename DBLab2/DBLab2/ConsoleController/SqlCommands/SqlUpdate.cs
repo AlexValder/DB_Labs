@@ -16,7 +16,7 @@ namespace DBLab2.ConsoleController.SqlCommands {
 
         public SqlUpdate(in string table,
             in IList<(string, string)> set,
-            in IList<(string, Operation, string)> cond)
+            in IList<(string, Operation, string)>? cond)
             : base(table, cond) {
             Set = set ?? throw new ArgumentNullException(nameof(set));
         }
