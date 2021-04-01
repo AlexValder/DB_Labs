@@ -105,6 +105,7 @@ namespace DBLab2.DBLogic {
         /// <param name="command">Insert command with the data to insert.</param>
         public static void InsertInto(SqlInsertInto command) {
             Check();
+
             var insertCommand = _sqlConnection!.CreateCommand();
             insertCommand.CommandText = command.Execute();
             var @return = insertCommand.ExecuteNonQuery();

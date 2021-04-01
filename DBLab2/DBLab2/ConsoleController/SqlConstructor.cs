@@ -79,7 +79,7 @@ namespace DBLab2.ConsoleController {
                 return;
             }
 
-            if (!ParseFieldValuePairs(table, out var set)) {
+            if (!ParseFieldValuePairs(table, out var set, true)) {
                 return;
             }
 
@@ -220,16 +220,27 @@ namespace DBLab2.ConsoleController {
             return true;
         }
 
-        private static bool ParseFieldValuePairs(in string table, out Dictionary<string, string>? set) {
+        private static bool ParseFieldValuePairs(in string table, out Dictionary<string, string>? set, bool all = false) {
             Console.WriteLine();
             var availableFields = GlobalContainer.Fields(table).ToList();
+            availableFields.Remove("id");
+            availableFields.Remove("ID");
+            availableFields.Remove("Id");
+            availableFields.Remove("iD");
             Printer.Debug("Available fields: {0}",
                 string.Join(", ", availableFields));
 
-            var setPairs = availableFields.ToDictionary(field => field, field => false);
+            var setPairs = availableFields.ToDictionary(field => field,
+                field => false,
+                StringComparer.OrdinalIgnoreCase
+            );
 
-
-            Printer.Debug("At any moment you can enter an empty line to indicate you're done.");
+            if (all) {
+                Printer.Debug("Please enter values for ALL fields.");
+            }
+            else {
+                Printer.Debug("At any moment you can enter an empty line to indicate you're done.");
+            }
 
             set = new Dictionary<string, string>();
             while (true) {
@@ -243,7 +254,11 @@ namespace DBLab2.ConsoleController {
                 var field = (Console.ReadLine() ?? "").Replace(" ", "");
 
                 if (field == "") {
-                    break;
+                    if (!all || !setPairs.Values.Contains(false)) {
+                        break;
+                    }
+                    Printer.Debug("You have to set all fields.");
+                    continue;
                 }
 
                 if (RETURN.Equals(field, STR_COMPARISON)) {
@@ -261,6 +276,10 @@ namespace DBLab2.ConsoleController {
                 var value = (Console.ReadLine() ?? "").Replace("  ", " ");
 
                 if (value == "") {
+                    if (setPairs.Values.Contains(false)) {
+                        Printer.Error("Please enter a valid value");
+                        continue;
+                    }
                     break;
                 }
 
