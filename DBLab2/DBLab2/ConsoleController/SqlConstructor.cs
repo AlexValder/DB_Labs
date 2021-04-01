@@ -130,7 +130,7 @@ namespace DBLab2.ConsoleController {
             Console.WriteLine();
             Printer.Debug("Available tables: {0}", string.Join(", ", availableTables));
 
-            Console.Write("Enter the table name: ");
+            Printer.Info("Enter the table name: ");
             while (true) {
                 string input = Console.ReadLine() ?? "";
                 table = input.Replace(" ", "");
