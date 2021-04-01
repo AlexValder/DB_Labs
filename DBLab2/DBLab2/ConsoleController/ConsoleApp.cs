@@ -12,23 +12,23 @@ namespace DBLab2.ConsoleController {
 
         private const string HELP_TEXT
             = "Welcome to our basic SQL Application!\n\n" +
-              "To execute supported SQL commands (SELECT, INSERT INTO, UPDATE, DELETE), " +
+              "To execute supported SQL commands (SELECT, INSERT, UPDATE, DELETE), " +
               "just type the command into the command prompt.\n" +
               "Available commands:\n" +
               "load <path>\t- load another DB-file;\n" +
               "list\t\t- prints names of all available tables;\n" +
               "show <table>\t- prints names of fields in the table;\n" +
-              "help\t\t- you're here!\n" +
+              "help\t\t- print this message;\n" +
               "exit\t\t- close the application.\n\n" +
               "Command syntax:\n\n" +
               "- SELECT:\n" +
-              "\tSELECT <fields> FROM <table> [WHERE <condition>]\n" +
-              "- INSERT INTO:\n" +
-              "\tINSERT INTO <table> [(column1, column2, ...)] VALUES (value1, value2, ...}\n" +
-              "- UPDATE:\n" +
-              "\tUPDATE <table> SET field1=value1, field2=value2, ... [WHERE <condition>]\n" +
-              "- DELETE:\n" +
-              "\tDELETE FROM <table> [WHERE <condition>]\n\n";
+              "\tYou will be asked to enter the table, fields to print and conditions the feilds must correspond." +
+              "\n- INSERT:\n" +
+              "\tYou will be asked to enter the table, fields and their values needed for insertion." +
+              "\n- UPDATE:\n" +
+              "\tYou will be asked to enter the table, fields to modify and then condition, the fields to be modified must correspond." +
+              "\n- DELETE:\n" +
+              "\tYou will be asked to enter the table and the condition, the stuff you're deleting must correspond.\n";
 
         private static readonly ImmutableDictionary<string, Action> Actions =
             new Dictionary<string, Action> {
