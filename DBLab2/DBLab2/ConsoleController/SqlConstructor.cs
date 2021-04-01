@@ -231,7 +231,7 @@ namespace DBLab2.ConsoleController {
                 string.Join(", ", availableFields));
 
             var setPairs = availableFields.ToDictionary(field => field,
-                field => false,
+                _ => false,
                 StringComparer.OrdinalIgnoreCase
             );
 
