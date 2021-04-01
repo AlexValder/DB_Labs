@@ -46,6 +46,8 @@ namespace DBLab2.ConsoleController {
         private static bool _exit;
         private static string _input = "";
 
+        private const StringComparison COMPARISON = StringComparison.OrdinalIgnoreCase;
+
         public static void Run() {
             MainLoop();
         }
@@ -62,6 +64,13 @@ namespace DBLab2.ConsoleController {
                 try {
                     if (_input.Contains(' ')) {
                         input = _input[0.._input.IndexOf(' ')] ?? string.Empty;
+                        if (input.Contains("select", COMPARISON) ||
+                            input.Contains("update", COMPARISON) ||
+                            input.Contains("insert", COMPARISON) ||
+                            input.Contains("delete", COMPARISON)) {
+                            Printer.Info("Don't enter full SQL request. This command will be interpreted as \"{0}\"",
+                                input.ToUpper());
+                        }
                     }
                     else {
                         input = _input;

@@ -83,6 +83,11 @@ namespace DBLab2.DBLogic {
             var selectCommand = _sqlConnection!.CreateCommand();
             selectCommand.CommandText = command.Execute();
 
+            data.Add(command.Fields == null ?
+                GlobalContainer.Fields(command.Table).ToList() :
+                command.Fields.ToList()
+            );
+
             using var reader = selectCommand.ExecuteReader();
             while (reader.Read()) {
                 var tmp = new List<string>();
@@ -91,8 +96,6 @@ namespace DBLab2.DBLogic {
                 }
                 data.Add(tmp);
             }
-
-            data.Insert(0, GlobalContainer.Fields(command.Table).ToList());
             return data;
         }
 
