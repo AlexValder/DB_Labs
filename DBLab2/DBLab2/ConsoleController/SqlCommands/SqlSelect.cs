@@ -17,7 +17,7 @@ namespace DBLab2.ConsoleController.SqlCommands {
 
         public SqlSelect(in string table,
             in IList<string>? fields,
-            in IList<(string, Operation, string)> conditions) : base(table, conditions) {
+            in IList<(string, Operation, string)>? conditions) : base(table, conditions) {
             Fields = fields;
         }
 

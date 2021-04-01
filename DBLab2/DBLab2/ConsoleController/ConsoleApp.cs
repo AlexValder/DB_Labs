@@ -32,15 +32,15 @@ namespace DBLab2.ConsoleController {
 
         private static readonly ImmutableDictionary<string, Action> Actions =
             new Dictionary<string, Action> {
-            ["SELECT"] = () => { SqlParser.ParseSelect(_input!); },
-            ["UPDATE"] = () => { SqlParser.ParseUpdate(_input!); },
-            ["INSERT"] = () => { SqlParser.ParseInsert(_input!); },
-            ["DELETE"] = () => { SqlParser.ParseDelete(_input!); },
-            ["load"]   = () => { LoadTable(_input!); },
-            ["list"]   = ListTables,
-            ["show"]   = () => { ShowFields(_input!); },
-            ["help"]   = () => { Console.WriteLine(HELP_TEXT); },
-            ["exit"]   = () => { _exit = true; }
+            ["SELECT"] = SqlConstructor.CreateSelect,
+            ["UPDATE"] = SqlConstructor.CreateUpdate,
+            ["INSERT"] = SqlConstructor.CreateInsert,
+            ["DELETE"] = SqlConstructor.CreateDelete,
+            [ "load" ] = () => { LoadTable(_input!); },
+            [ "list" ] = ListTables,
+            [ "show" ] = () => { ShowFields(_input!); },
+            [ "help" ] = () => { Console.WriteLine(HELP_TEXT); },
+            [ "exit" ] = () => { _exit = true; }
         }.ToImmutableDictionary(StringComparer.OrdinalIgnoreCase);
 
         private static bool _exit;

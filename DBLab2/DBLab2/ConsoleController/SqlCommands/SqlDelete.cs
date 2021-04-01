@@ -11,7 +11,7 @@ namespace DBLab2.ConsoleController.SqlCommands {
     public class SqlDelete : SqlCommand {
         public SqlDelete(in string table) : base(table) {}
 
-        public SqlDelete(in string table, in IList<(string, Operation, string)> conditions)
+        public SqlDelete(in string table, in IList<(string, Operation, string)>? conditions)
             : base(table, conditions) {}
 
         public override string ToString() =>

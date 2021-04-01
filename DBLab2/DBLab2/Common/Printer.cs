@@ -78,8 +78,8 @@ namespace DBLab2.Common {
                 tmp[i] = new string('-', width[i] + 2);
             }
 
-            var outerSeparator = new string('=', width.Sum(len => len + 2) + 2 * (width.Count - 1));
             var innerSeparator = $"+{string.Join('+', tmp)}+";
+            var outerSeparator = innerSeparator.Replace('+', '=').Replace('-', '=');
 
             Console.WriteLine(outerSeparator);
             for (int i = 0; i < rows; ++i) {
