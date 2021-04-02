@@ -6,4 +6,4 @@
 
 * [@AlexValder](https://github.com/AlexValder)
 * [@ArthurMamedov](https://github.com/ArthurMamedov)
-* [@SoloPashaS](https://github.com/SoloPashaS)
+* [@SoloPashaS](https://github.com/SoloPashaS) [left]
