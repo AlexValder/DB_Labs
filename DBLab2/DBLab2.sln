@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBLab2", "DBLab2\DBLab2.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AvaloniaGUI", "AvaloniaGUI\AvaloniaGUI.csproj", "{6C30B0A6-81A6-4248-9B61-2C4FA60B83A4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{E1EF499E-9753-40FD-BF0A-5226D41CC36F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{6C30B0A6-81A6-4248-9B61-2C4FA60B83A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6C30B0A6-81A6-4248-9B61-2C4FA60B83A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6C30B0A6-81A6-4248-9B61-2C4FA60B83A4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E1EF499E-9753-40FD-BF0A-5226D41CC36F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E1EF499E-9753-40FD-BF0A-5226D41CC36F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E1EF499E-9753-40FD-BF0A-5226D41CC36F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E1EF499E-9753-40FD-BF0A-5226D41CC36F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -10,4 +10,7 @@
         <PackageReference Include="Avalonia.Diagnostics" Version="0.10.2" />
         <PackageReference Include="Microsoft.Data.Sqlite" Version="5.0.5" />
     </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\Common\Common.csproj" />
+    </ItemGroup>
 </Project>

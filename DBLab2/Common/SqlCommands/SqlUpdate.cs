@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace DBLab2.ConsoleController.SqlCommands {
+namespace Common.SqlCommands {
 
     /// <summary>
     /// Represents SQL command UPDATE %table_name% SET field1 = value1, ... (WHERE %condition%)

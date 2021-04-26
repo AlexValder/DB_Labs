@@ -5,9 +5,10 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text;
-using DBLab2.Common;
+using Common;
+using Common.SqlCommands;
 using Microsoft.Data.Sqlite;
-using DBLab2.ConsoleController.SqlCommands;
+
 
 namespace DBLab2.DBLogic {
     public static class SqliteAdapter {
