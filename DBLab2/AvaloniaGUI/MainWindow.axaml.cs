@@ -21,7 +21,7 @@ namespace AvaloniaGUI {
         }
 
         private void EnableControls() {
-            List<string> buttonsToEnable = new List<string> { "DeleteButton", "AddButton", "EditButton", "FilterButton" };
+            List<string> buttonsToEnable = new() { "DeleteButton", "AddButton", "EditButton", "FilterButton" };
             foreach (var button in buttonsToEnable) {
                 this.FindControl<Button>(button).IsEnabled = true;
             }
