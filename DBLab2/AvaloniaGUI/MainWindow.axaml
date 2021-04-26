@@ -10,17 +10,17 @@
     <ComboBox Name="Tables" IsEnabled="False" Margin="10 20 10 20" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" SelectedIndex="0"/>
 
     <Grid Grid.Row="0" Grid.Column="1" ColumnDefinitions="*,*,*,*">
-      <Button Name="AddButton" IsEnabled="False" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Grid.Column="0" Margin="10 20 10 20">➕</Button>
-      <Button Name="DeleteButton" IsEnabled="False" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Grid.Column="1" Margin="10 20 10 20">➖</Button>
-      <Button Name="EditButton" IsEnabled="False" Grid.Column="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Margin="10 20 10 20">✏</Button>
+      <Button Name="AddButton" IsEnabled="False" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Grid.Column="0" Margin="10 20 10 20">Add Entry</Button>
+      <Button Name="DeleteButton" IsEnabled="False" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Grid.Column="1" Margin="10 20 10 20">Remove Entry</Button>
+      <Button Name="EditButton" IsEnabled="False" Grid.Column="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Margin="10 20 10 20">Edit Entry</Button>
       <Button Name="OpenButton" Click="OpenDbClick" Grid.Column="3" Margin="10 20 10 20" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">Open DB</Button>
     </Grid>
 
     <Grid Grid.Row="1" Grid.Column="0" RowDefinitions="*,*,*,*">
-      <Button Name="FilterButton" IsEnabled="False" Grid.Row="0" Margin="10 10 10 10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">📜</Button>
-      <Button Name="HelpButton" Grid.Row="1" Margin="10 10 10 10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">❔</Button>
-      <Button Name="DummyButton" Grid.Row="2" Margin="10 10 10 10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">[reserved]</Button>
-      <Button Grid.Row="3" Margin="10 10 10 10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">[reserved]</Button>
+      <Button Name="FilterButton" IsEnabled="False" Grid.Row="0" Margin="10 10 10 10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">Filter</Button>
+      <Button Name="HelpButton" Grid.Row="1" Margin="10 10 10 10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">Help</Button>
+      <Button Name="LogoutButton" Grid.Row="2" Margin="10 10 10 10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">Logout</Button>
+      <Button Grid.Row="3" Margin="10 10 10 10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">[dummy]</Button>
     </Grid>
 
     <ListBox Grid.Row="1" Grid.Column="1" Margin="10">

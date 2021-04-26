@@ -42,6 +42,7 @@ namespace AvaloniaGUI {
                 EnableControls();
                 var elem = this.FindControl<ComboBox>("Tables");
                 elem.Items = from table in GlobalContainer.Tables where table != "Tables" select table;
+                elem.SelectedIndex = 0;
             }
         }
     }
