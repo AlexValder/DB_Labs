@@ -4,7 +4,7 @@ using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Linq;
 
-namespace DBLab2.Common {
+namespace Common {
     public static class Printer {
         private enum MessageTypes {
             Info,

@@ -1,12 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using DBLab2.Common;
-using DBLab2.ConsoleController.SqlCommands;
-using DBLab2.DBLogic;
-using Conditions = System.ValueTuple<string, DBLab2.ConsoleController.SqlCommands.Operation, string>;
+using Conditions = System.ValueTuple<string, Common.SqlCommands.Operation, string>;
 
-namespace DBLab2.ConsoleController {
+namespace Common.SqlCommands {
     public static class SqlConstructor {
 
         private const StringSplitOptions OPTIONS =

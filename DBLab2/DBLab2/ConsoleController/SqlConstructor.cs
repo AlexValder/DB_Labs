@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using DBLab2.Common;
-using DBLab2.ConsoleController.SqlCommands;
-using DBLab2.DBLogic;
-using Conditions = System.ValueTuple<string, DBLab2.ConsoleController.SqlCommands.Operation, string>;
+using Common;
+using Common.SqlCommands;
+using Conditions = System.ValueTuple<string, Common.SqlCommands.Operation, string>;
+using SqliteAdapter = DBLab2.DBLogic.SqliteAdapter;
 
 namespace DBLab2.ConsoleController {
     public static class SqlConstructor {

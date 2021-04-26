@@ -1,22 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using DBLab2.DBLogic;
 
-namespace DBLab2.Common {
-    internal static class GlobalContainer {
+namespace Common {
+    public static class GlobalContainer {
         private static readonly StringComparer Comparer = StringComparer.InvariantCultureIgnoreCase;
 
         private static ImmutableDictionary<string, string[]>? _dictOfLists;
 
-        internal static void CacheMetadata(IDictionary<string, string[]> data) {
+        public static void CacheMetadata(IDictionary<string, string[]> data) {
             _dictOfLists = data.ToImmutableDictionary(Comparer);
         }
 
-        public static string BdSelected { get; internal set; } = "None";
+        public static string BdSelected { get; set; } = "None";
         public static int TableCount => _dictOfLists?.Count ?? 0;
 
         public static int FieldCount(string tableName) => _dictOfLists?[tableName].Length ?? 0;
