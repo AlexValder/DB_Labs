@@ -21,7 +21,7 @@ namespace AvaloniaGUI {
         }
 
         private void EnableControls() {
-            List<string> buttonsToEnable = new() { "DeleteButton", "AddButton", "EditButton", "FilterButton" };
+            List<string> buttonsToEnable = new() { "AddTeacherButton", "AddStudentButton", "EditButton", "FilterButton" };
             foreach (var button in buttonsToEnable) {
                 this.FindControl<Button>(button).IsEnabled = true;
             }
@@ -46,9 +46,20 @@ namespace AvaloniaGUI {
             }
         }
 
-        public void SpawnWindow(object sender, RoutedEventArgs e) {
-            var wnd = new AvaloniaGUI.LogInWindow();
+        public void AddStudentEntry(object sender, RoutedEventArgs e) {
+            var wnd = new AvaloniaGUI.AddStudentEntryWindow();
+
             wnd.Show();
+        }
+
+        public void AddTeacherEntry(object sender, RoutedEventArgs e) {
+            var wnd = new AvaloniaGUI.AddTeacherEntryWindow();
+
+            wnd.Show();
+        }
+
+        public void SpawnWindow(object sender, RoutedEventArgs e) {
+            /* Nothing :( */
         }
     }
 }

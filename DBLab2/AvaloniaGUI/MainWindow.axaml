@@ -10,8 +10,8 @@
     <ComboBox Name="Tables" IsEnabled="False" Margin="10 20 10 20" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" SelectedIndex="0"/>
 
     <Grid Grid.Row="0" Grid.Column="1" ColumnDefinitions="*,*,*,*">
-      <Button Name="AddButton" IsEnabled="False" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Grid.Column="0" Margin="10 20 10 20">Add Entry</Button>
-      <Button Name="DeleteButton" IsEnabled="False" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Grid.Column="1" Margin="10 20 10 20">Remove Entry</Button>
+      <Button Name="AddTeacherButton" Click="AddStudentEntry" IsEnabled="False" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Grid.Column="0" Margin="10 20 10 20">Add Student</Button>
+      <Button Name="AddStudentButton" Click="AddTeacherEntry" IsEnabled="False" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Grid.Column="1" Margin="10 20 10 20">Add Teacher</Button>
       <Button Name="EditButton" IsEnabled="False" Grid.Column="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Margin="10 20 10 20">Edit Entry</Button>
       <Button Name="OpenButton" Click="OpenDbClick" Grid.Column="3" Margin="10 20 10 20" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">Open DB</Button>
     </Grid>

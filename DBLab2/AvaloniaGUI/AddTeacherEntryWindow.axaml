@@ -1,0 +1,18 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="250" d:DesignHeight="280"
+        Width="250" Height="280"
+        x:Class="AvaloniaGUI.AddTeacherEntryWindow"
+        Title="AddTeacherEntry">
+    <StackPanel HorizontalAlignment="Stretch">
+    <Label Margin="10 5 10 10">Book ID:</Label>
+    <TextBox Margin="10 5"></TextBox>
+    <Label Margin="10 5">Teacher ID:</Label>
+    <TextBox Margin="10 5"></TextBox>
+    <Label Margin="10 5">Taken date:</Label>
+    <TextBox Margin="10 5"></TextBox>
+    <Button Margin="10 10 10 5">Submit</Button>
+  </StackPanel>
+</Window>
