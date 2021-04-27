@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.IO;
 using System.Linq;
-using System.Text;
-using DBLab2.Common;
 using Microsoft.Data.Sqlite;
-using DBLab2.ConsoleController.SqlCommands;
 
-namespace DBLab2.DBLogic {
+namespace Common.SqlCommands {
     public static class SqliteAdapter {
         private static SqliteConnection? _sqlConnection;
 

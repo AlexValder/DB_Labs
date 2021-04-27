@@ -4,6 +4,8 @@ using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using System.Collections.Generic;
 using System.Linq;
+using Common;
+using Common.SqlCommands;
 
 namespace AvaloniaGUI {
     public class MainWindow : Window {
@@ -18,15 +20,15 @@ namespace AvaloniaGUI {
             AvaloniaXamlLoader.Load(this);
         }
 
-        private void enableControls() {
-            List<string> buttonsToEnable = new List<string> { "DeleteButton", "AddButton", "EditButton", "FilterButton" };
+        private void EnableControls() {
+            List<string> buttonsToEnable = new() { "DeleteButton", "AddButton", "EditButton", "FilterButton" };
             foreach (var button in buttonsToEnable) {
                 this.FindControl<Button>(button).IsEnabled = true;
             }
             this.FindControl<ComboBox>("Tables").IsEnabled = true;
         }
 
-        public async void OpenDBClick(object sender, RoutedEventArgs e) {
+        public async void OpenDbClick(object sender, RoutedEventArgs e) {
             var cal1 = this.FindControl<Button>("OpenButton");
             var fileDialog = new OpenFileDialog();
             fileDialog.Filters.Add(new FileDialogFilter() { Name = "Text", Extensions = { "db" } });
@@ -35,11 +37,12 @@ namespace AvaloniaGUI {
                 return;
             }
 
-            var isDBSet = DBLab2.DBLogic.SqliteAdapter.TrySetDatabase(res[0]);
-            if (isDBSet) {
-                enableControls();
+            var isDbSet = SqliteAdapter.TrySetDatabase(res[0]);
+            if (isDbSet) {
+                EnableControls();
                 var elem = this.FindControl<ComboBox>("Tables");
-                elem.Items = from table in DBLab2.Common.GlobalContainer.Tables where table != "Tables" select table;
+                elem.Items = from table in GlobalContainer.Tables where table != "Tables" select table;
+                elem.SelectedIndex = 0;
             }
         }
 

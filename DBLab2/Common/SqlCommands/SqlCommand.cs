@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace DBLab2.ConsoleController.SqlCommands {
+namespace Common.SqlCommands {
 
     /// <summary>
     /// Base abstract class for SQL command classes
