@@ -42,5 +42,10 @@ namespace AvaloniaGUI {
                 elem.Items = from table in DBLab2.Common.GlobalContainer.Tables where table != "Tables" select table;
             }
         }
+
+        public void SpawnWindow(object sender, RoutedEventArgs e) {
+            var wnd = new AvaloniaGUI.LogInWindow();
+            wnd.Show();
+        }
     }
 }
