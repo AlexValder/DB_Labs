@@ -16,6 +16,24 @@ namespace AvaloniaGUI {
 #endif
         }
 
+        public void SetupAskForDataWindow(AskForDataWindow wnd, IEnumerable<string> labels) {
+            if (wnd is null) {
+                return;
+            }
+            labels.Count();
+            for (int c = 0; c < labels.Count(); c++) {
+                var ctr = wnd.FindControl<Label>("Label" + c);
+                ctr.Content = labels.ElementAt(c);
+            }
+            for (int c = labels.Count(); c < 8; c++) {
+                var ctr = wnd.FindControl<Label>("Label" + c);
+                ctr.IsVisible = false;
+                var txb = wnd.FindControl<TextBox>("TextBox" + c);
+                txb.IsVisible = false;
+            }
+            wnd.Height = wnd.Height / 7 * labels.Count();
+        }
+
         private void InitializeComponent() {
             AvaloniaXamlLoader.Load(this);
         }
@@ -54,12 +72,15 @@ namespace AvaloniaGUI {
 
         public void AddTeacherEntry(object sender, RoutedEventArgs e) {
             var wnd = new AvaloniaGUI.AddTeacherEntryWindow();
-
+            //wnd.
             wnd.Show();
         }
 
         public void SpawnWindow(object sender, RoutedEventArgs e) {
-            /* Nothing :( */
+            var wnd = new AvaloniaGUI.AskForDataWindow();
+            SetupAskForDataWindow(wnd, new List<string> { "First", "Second", "Third" });
+            //wnd.
+            wnd.Show();
         }
     }
 }

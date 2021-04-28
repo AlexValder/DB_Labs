@@ -20,7 +20,7 @@
       <Button Name="FilterButton" IsEnabled="False" Grid.Row="0" Margin="10 10 10 10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">Filter</Button>
       <Button Name="HelpButton" Grid.Row="1" Margin="10 10 10 10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">Help</Button>
       <Button Name="LogoutButton" Grid.Row="2" Margin="10 10 10 10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">Logout</Button>
-      <Button Grid.Row="3" Margin="10 10 10 10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">[dummy]</Button>
+      <Button Click="SpawnWindow" Grid.Row="3" Margin="10 10 10 10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">[dummy]</Button>
     </Grid>
 
     <ListBox Grid.Row="1" Grid.Column="1" Margin="10">

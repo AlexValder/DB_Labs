@@ -1,0 +1,28 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="650"
+        Width="300" Height="650"
+        x:Class="AvaloniaGUI.AskForDataWindow"
+        Title="AskForDataWindow">
+  <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Center">
+    <Label Name="Label0" Margin="10 5 10 5">Label</Label>
+    <TextBox Name="TextBox0" Margin="10 5 10 5"></TextBox>
+    <Label Name="Label1" Margin="10 5 10 5">Label</Label>
+    <TextBox Name="TextBox1" Margin="10 5 10 5"></TextBox>
+    <Label Name="Label2" Margin="10 5 10 5">Label</Label>
+    <TextBox Name="TextBox2" Margin="10 5 10 5"></TextBox>
+    <Label Name="Label3" Margin="10 5 10 5">Label</Label>
+    <TextBox Name="TextBox3" Margin="10 5 10 5"></TextBox>
+    <Label Name="Label4" Margin="10 5 10 5">Label</Label>
+    <TextBox Name="TextBox4" Margin="10 5 10 5"></TextBox>
+    <Label Name="Label5" Margin="10 5 10 5">Label</Label>
+    <TextBox Name="TextBox5" Margin="10 5 10 5"></TextBox>
+    <Label Name="Label6" Margin="10 5 10 5">Label</Label>
+    <TextBox Name="TextBox6" Margin="10 5 10 5"></TextBox>
+    <Label Name="Label7" Margin="10 5 10 5">Label</Label>
+    <TextBox Name="TextBox7" Margin="10 5 10 5"></TextBox>
+    <Button HorizontalAlignment="Center" HorizontalContentAlignment="Center" Margin="10 5">Sumbit</Button>
+  </StackPanel>
+</Window>
