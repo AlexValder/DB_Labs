@@ -13,12 +13,4 @@
     <ItemGroup>
       <ProjectReference Include="..\Common\Common.csproj" />
     </ItemGroup>
-    <ItemGroup>
-      <Compile Update="AddStudentEntryWindow.axaml.cs">
-        <DependentUpon>AddStudentEntryWindow.axaml</DependentUpon>
-      </Compile>
-      <Compile Update="AddTeacherEntryWindow.axaml.cs">
-        <DependentUpon>AddTeacherEntryWindow.axaml</DependentUpon>
-      </Compile>
-    </ItemGroup>
 </Project>

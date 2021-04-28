@@ -65,21 +65,22 @@ namespace AvaloniaGUI {
         }
 
         public void AddStudentEntry(object sender, RoutedEventArgs e) {
-            var wnd = new AvaloniaGUI.AddStudentEntryWindow();
-
-            wnd.Show();
+            //I will do it later...
         }
 
         public void AddTeacherEntry(object sender, RoutedEventArgs e) {
-            var wnd = new AvaloniaGUI.AddTeacherEntryWindow();
-            //wnd.
+            //I will do it later...
+        }
+
+        public void SwitchToGodMode(object sender, RoutedEventArgs e) {
+            var wnd = new AvaloniaGUI.GodModWindow();
+            //this.IsVisible = false;
             wnd.Show();
         }
 
         public void SpawnWindow(object sender, RoutedEventArgs e) {
             var wnd = new AvaloniaGUI.AskForDataWindow();
             SetupAskForDataWindow(wnd, new List<string> { "First", "Second", "Third" });
-            //wnd.
             wnd.Show();
         }
     }

@@ -2,6 +2,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        Name="MainWindow1"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="AvaloniaGUI.MainWindow"
         Title="AvaloniaGUI">
@@ -20,7 +21,7 @@
       <Button Name="FilterButton" IsEnabled="False" Grid.Row="0" Margin="10 10 10 10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">Filter</Button>
       <Button Name="HelpButton" Grid.Row="1" Margin="10 10 10 10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">Help</Button>
       <Button Name="LogoutButton" Grid.Row="2" Margin="10 10 10 10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">Logout</Button>
-      <Button Click="SpawnWindow" Grid.Row="3" Margin="10 10 10 10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">[dummy]</Button>
+      <Button Name="GodModeButton" Click="SwitchToGodMode" Grid.Row="3" Margin="10 10 10 10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">(_- () |)   /\/\ () |) (-</Button>
     </Grid>
 
     <ListBox Grid.Row="1" Grid.Column="1" Margin="10">
