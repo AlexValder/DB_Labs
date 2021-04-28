@@ -31,26 +31,31 @@ namespace AvaloniaGUI {
             AvaloniaXamlLoader.Load(this);
         }
 
-        private void SetupAskForDataWindow(in AskForDataWindow wnd, in IList<string> labels) {
-            for (int c = 0; c < labels.Count; c++) {
-                var ctr = wnd.FindControl<Label>("Label" + c);
-                ctr.Content = labels.ElementAt(c);
+        private static void SetupAskForDataWindow(in AskForDataWindow wnd, in string table, in IList<string> labels) {
+            wnd.Title = table;
+            for (var i = 0; i < labels.Count; ++i) {
+                var ctr = wnd.FindControl<Label>("Label" + i);
+                ctr.Content = labels[i];
             }
-            for (int c = labels.Count; c < 8; c++) {
-                var ctr = wnd.FindControl<Label>("Label" + c);
+            for (var i = labels.Count; i < 8; ++i) {
+                var ctr = wnd.FindControl<Label>("Label" + i);
                 ctr.IsVisible = false;
-                var txb = wnd.FindControl<TextBox>("TextBox" + c);
+                var txb = wnd.FindControl<TextBox>("TextBox" + i);
                 txb.IsVisible = false;
             }
-            wnd.Height = wnd.Height / 7 * labels.Count;
+            wnd.Height = wnd.Height / 7 * labels.Count + 20;
         }
 
         public void AddEntry(object sender, RoutedEventArgs e) {
-            var wnd = new AskForDataWindow();
             var godTables = this.FindControl<ComboBox>("GodTables");
             var selectedTable = godTables.SelectedItem as string;
 
-            SetupAskForDataWindow(wnd, (GlobalContainer.Fields(selectedTable!) as IList<string>)!);
+            var fields = GlobalContainer.Fields(selectedTable!).ToList();
+            fields.Remove("Id");
+            var wnd = new AskForDataWindow {
+                Table = selectedTable!
+            };
+            SetupAskForDataWindow(wnd, selectedTable!, fields);
             wnd.CanResize = false;
             wnd.Show();
         }

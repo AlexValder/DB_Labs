@@ -23,6 +23,6 @@
     <TextBox Name="TextBox6" Margin="10 5 10 5"></TextBox>
     <Label Name="Label7" Margin="10 5 10 5">Label</Label>
     <TextBox Name="TextBox7" Margin="10 5 10 5"></TextBox>
-    <Button Click="SubmitPressed" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Margin="10 5">Sumbit</Button>
+    <Button Click="SubmitPressed" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Margin="10 5">Submit</Button>
   </StackPanel>
 </Window>
