@@ -23,6 +23,8 @@ namespace AvaloniaGUI {
             AvaloniaXamlLoader.Load(this);
         }
 
+        public Action<List<string>> onSubmit { get; set; } = _ => { };
+
         public void SubmitPressed(object sender, RoutedEventArgs e) {
             var values = new List<string>();
             for (var c = 0; c < 8; c++) {
@@ -33,16 +35,7 @@ namespace AvaloniaGUI {
                 }
                 values.Add(value.Text);
             }
-
-            var fields = GlobalContainer.Fields(Table).ToList();
-            fields.Remove("Id");
-            var command = new SqlInsertInto(Table, values, fields);
-            try {
-                SqliteAdapter.InsertInto(command);
-            }
-            catch {
-                // ????? idk what to do
-            }
+            onSubmit(values);
             Close();
         }
     }
