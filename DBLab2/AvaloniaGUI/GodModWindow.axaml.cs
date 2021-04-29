@@ -4,6 +4,7 @@ using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Common;
@@ -11,6 +12,7 @@ using Common.SqlCommands;
 
 namespace AvaloniaGUI {
     public class GodModWindow : Window {
+        public static ObservableCollection<List<string>> TableItems = new();
 
         private readonly ImmutableList<string> _buttonNames = new List<string> {
             "AddButton",
@@ -55,11 +57,28 @@ namespace AvaloniaGUI {
             var wnd = new AskForDataWindow {
                 Table = selectedTable!
             };
+            wnd.onSubmit = list =>
+            {
+                var fields = GlobalContainer.Fields(wnd.Table).ToList();
+                fields.Remove("Id");
+                var command = new SqlInsertInto(wnd.Table, list, fields);
+                try {
+                    SqliteAdapter.InsertInto(command);
+                }
+                catch {
+                    // ????? idk what to do
+                }
+            };
+
             SetupAskForDataWindow(wnd, selectedTable!, fields);
             wnd.CanResize = false;
             wnd.Show();
         }
-        
+
+        private void DelEntry(object? _, RoutedEventArgs _2) {
+            var godTables = this.FindControl<ComboBox>("GodTables");
+            // var selectedTable
+        }
 
         [SuppressMessage("ReSharper", "UnusedParameter.Local")]
         private void OnExitGodMode(object _, RoutedEventArgs _2) => Close();
@@ -92,6 +111,10 @@ namespace AvaloniaGUI {
             var elem = this.FindControl<ComboBox>("GodTables");
             elem.Items = from table in GlobalContainer.Tables where table != "Tables" select table;
             elem.SelectedIndex = 0;
+        }
+
+        private void GodTables_OnSelectionChanged(object? sender, SelectionChangedEventArgs e) {
+
         }
     }
 }
