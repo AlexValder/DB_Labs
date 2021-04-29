@@ -16,6 +16,8 @@ namespace AvaloniaGUI {
 #endif
         }
 
+        private int currentLibrarian = -1;
+
         public void SetupAskForDataWindow(AskForDataWindow wnd, IEnumerable<string> labels) {
             if (wnd is null) {
                 return;
@@ -64,8 +66,15 @@ namespace AvaloniaGUI {
             }
         }
 
+        public void onSubmit(List<string> fields) {
+               
+        }
+
         public void AddStudentEntry(object sender, RoutedEventArgs e) {
-            //I will do it later...
+            var wnd = new AvaloniaGUI.AskForDataWindow();
+            wnd.SetupAskForDataWindow(new List<string>() { "BookId", "DueDate", "StudentId", "TakenDate" });
+            wnd.onSubmit = onSubmit;
+            wnd.Show();
         }
 
         public void AddTeacherEntry(object sender, RoutedEventArgs e) {
