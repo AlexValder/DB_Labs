@@ -41,7 +41,7 @@ namespace AvaloniaGUI {
             var godTables = this.FindControl<ComboBox>("GodTables");
             var selectedTable = godTables.SelectedItem;
             //Then we take fields names from DB, setting them up (throwing to SetupAskForDataWindow as a second parameter) and taking the response.
-            //SetupAskForDataWindow(wnd, new List<string> {field1, field2, ..., fieldN});
+            SetupAskForDataWindow(wnd, new List<string> {"field1", "field2", "...", "fieldN"});
             
             wnd.Show();
         }

@@ -2,7 +2,9 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace AvaloniaGUI {
     public class AskForDataWindow : Window {
@@ -13,8 +15,25 @@ namespace AvaloniaGUI {
 #endif
         }
 
+        public Action<List<string>> onSubmit { get; set; }
+
         private void InitializeComponent() {
             AvaloniaXamlLoader.Load(this);
+        }
+
+        public void SetupAskForDataWindow(IEnumerable<string> labels) {
+            labels.Count();
+            for (int c = 0; c < labels.Count(); c++) {
+                var ctr = this.FindControl<Label>("Label" + c);
+                ctr.Content = labels.ElementAt(c);
+            }
+            for (int c = labels.Count(); c < 8; c++) {
+                var ctr = this.FindControl<Label>("Label" + c);
+                ctr.IsVisible = false;
+                var txb = this.FindControl<TextBox>("TextBox" + c);
+                txb.IsVisible = false;
+            }
+            this.Height = this.Height / 7 * labels.Count();
         }
 
         public void SubmitPressed(object sender, RoutedEventArgs e) {
@@ -26,7 +45,7 @@ namespace AvaloniaGUI {
                     fields.Add(tbctr.Text);
                 }
             }
-            //Writing to DB...
+            onSubmit(fields);
         }
     }
 }
