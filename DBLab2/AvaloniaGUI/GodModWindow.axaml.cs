@@ -7,12 +7,15 @@ using System.Collections.Immutable;
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Reactive.Linq;
 using Common;
 using Common.SqlCommands;
 
 namespace AvaloniaGUI {
     public class GodModWindow : Window {
-        public static ObservableCollection<List<string>> TableItems = new();
+        private ListBox _grid;
+        private ComboBox _tables;
+        private string _tableName = "";
 
         private readonly ImmutableList<string> _buttonNames = new List<string> {
             "AddButton",
@@ -27,10 +30,23 @@ namespace AvaloniaGUI {
 #if DEBUG
             this.AttachDevTools();
 #endif
+            _grid = this.FindControl<ListBox>("GodGrid");
+            _tables = this.FindControl<ComboBox>("GodTables");
         }
 
         private void InitializeComponent() {
             AvaloniaXamlLoader.Load(this);
+        }
+
+        private void UpdateList() {
+            _grid.Items = null;
+            var command = new SqlSelect(_tableName);
+            var lists = SqliteAdapter.Select(command);
+            var items = new List<string> {
+                string.Join(" ", GlobalContainer.Fields(_tableName))
+            };
+            items.AddRange(lists.Select(list => string.Join(" ", list)));
+            _grid.Items = items;
         }
 
         private static void SetupAskForDataWindow(in AskForDataWindow wnd, in string table, in IList<string> labels) {
@@ -68,6 +84,7 @@ namespace AvaloniaGUI {
                 catch {
                     // ????? idk what to do
                 }
+                UpdateList();
             };
 
             SetupAskForDataWindow(wnd, selectedTable!, fields);
@@ -111,10 +128,17 @@ namespace AvaloniaGUI {
             var elem = this.FindControl<ComboBox>("GodTables");
             elem.Items = from table in GlobalContainer.Tables where table != "Tables" select table;
             elem.SelectedIndex = 0;
+            _tableName = elem.SelectedItem!.ToString()!;
         }
 
         private void GodTables_OnSelectionChanged(object? sender, SelectionChangedEventArgs e) {
-
+            if (_grid == null) {
+                _grid = this.FindControl<ListBox>("GodGrid");
+            }
+            if (_grid.SelectedItem != null) {
+                _tableName = _grid.SelectedItem!.ToString()!;
+                UpdateList();
+            }
         }
     }
 }

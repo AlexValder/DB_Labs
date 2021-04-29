@@ -23,7 +23,7 @@
       <Button Name="DummyButton" Grid.Row="3" Margin="10 10 10 10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">[dummy]</Button>
     </Grid>
 
-    <ListBox Name="GodList" Items="{Binding TableItems}" Grid.Row="1" Grid.Column="1" Margin="10">
+    <ListBox Name="GodGrid" Grid.Row="1" Grid.Column="1" Margin="10">
     </ListBox>
 
   </Grid>
