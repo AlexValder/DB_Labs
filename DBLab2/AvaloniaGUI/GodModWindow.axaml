@@ -7,11 +7,11 @@
         Title="GodModWindow">
   <Grid ColumnDefinitions="*,2*" RowDefinitions="*,3*">
 
-    <ComboBox Name="GodTables" IsEnabled="False" Margin="10 20 10 20" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" SelectedIndex="0"/>
+    <ComboBox SelectionChanged="GodTables_OnSelectionChanged" Name="GodTables" IsEnabled="False" Margin="10 20 10 20" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" SelectedIndex="0"/>
 
     <Grid Grid.Row="0" Grid.Column="1" ColumnDefinitions="*,*,*,*">
       <Button Name="AddButton" Click="AddEntry" IsEnabled="True" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Grid.Column="0" Margin="10 20 10 20">Add Entry</Button>
-      <Button Name="RemoveButton" IsEnabled="False" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Grid.Column="1" Margin="10 20 10 20">Remove Entry</Button>
+      <Button Name="RemoveButton" Click="DelEntry" IsEnabled="False" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Grid.Column="1" Margin="10 20 10 20">Remove Entry</Button>
       <Button Name="EditButton" IsEnabled="False" Grid.Column="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Margin="10 20 10 20">Edit Entry</Button>
       <Button Name="OpenButton" Click="OpenButton_OnClick" Grid.Column="3" Margin="10 20 10 20" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">Open DB</Button>
     </Grid>
@@ -23,7 +23,7 @@
       <Button Name="DummyButton" Grid.Row="3" Margin="10 10 10 10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">[dummy]</Button>
     </Grid>
 
-    <ListBox Name="GodList" Grid.Row="1" Grid.Column="1" Margin="10">
+    <ListBox Name="GodList" Items="{Binding TableItems}" Grid.Row="1" Grid.Column="1" Margin="10">
     </ListBox>
 
   </Grid>
