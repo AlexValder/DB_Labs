@@ -72,7 +72,7 @@ namespace AvaloniaGUI {
 
         public void AddStudentEntry(object sender, RoutedEventArgs e) {
             var wnd = new AvaloniaGUI.AskForDataWindow();
-            wnd.SetupAskForDataWindow(new List<string>() { "BookId", "DueDate", "StudentId", "TakenDate" });
+            SetupAskForDataWindow(wnd, new List<string>() { "BookId", "DueDate", "StudentId", "TakenDate" });
             wnd.onSubmit = onSubmit;
             wnd.Show();
         }
