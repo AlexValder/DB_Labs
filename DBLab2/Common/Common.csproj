@@ -13,4 +13,10 @@
       <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="5.0.5" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Resource Include="Library.db">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+    </ItemGroup>
+
 </Project>

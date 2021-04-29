@@ -13,9 +13,6 @@
 
     <ItemGroup>
       <None Remove="Library.db" />
-      <Content Include="Library.db">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
     </ItemGroup>
 
     <ItemGroup>

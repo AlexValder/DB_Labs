@@ -82,13 +82,18 @@ namespace AvaloniaGUI {
         }
 
         public void SwitchToGodMode(object sender, RoutedEventArgs e) {
-            var wnd = new AvaloniaGUI.GodModWindow();
-            //this.IsVisible = false;
+            var wnd = new GodModWindow();
+            wnd.Closed += (_, _2) =>
+            {
+                Show();
+                Focus();
+            };
             wnd.Show();
+            Hide();
         }
 
         public void SpawnWindow(object sender, RoutedEventArgs e) {
-            var wnd = new AvaloniaGUI.AskForDataWindow();
+            var wnd = new AskForDataWindow();
             SetupAskForDataWindow(wnd, new List<string> { "First", "Second", "Third" });
             wnd.Show();
         }
