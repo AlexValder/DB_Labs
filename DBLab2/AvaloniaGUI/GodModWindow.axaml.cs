@@ -59,6 +59,7 @@ namespace AvaloniaGUI {
             wnd.CanResize = false;
             wnd.Show();
         }
+        
 
         [SuppressMessage("ReSharper", "UnusedParameter.Local")]
         private void OnExitGodMode(object _, RoutedEventArgs _2) => Close();
