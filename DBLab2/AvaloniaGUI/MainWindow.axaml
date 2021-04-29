@@ -24,7 +24,11 @@
       <Button Name="GodModeButton" Click="SwitchToGodMode" Grid.Row="3" Margin="10 10 10 10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">(_- () |)   /\/\ () |) (-</Button>
     </Grid>
 
-    <ListBox Grid.Row="1" Grid.Column="1" Margin="10">
+    <!--<StackPanel Grid.Row="1" Grid.Column="1" Margin="10">
+      <DataGrid AutoGenerateColumns="True" "></DataGrid>
+    </StackPanel>-->
+    <ListBox Name="TablePrinter" Grid.Row="1" Grid.Column="1" Margin="10" Items="{Binding Elements}">
+      
     </ListBox>
 
   </Grid>

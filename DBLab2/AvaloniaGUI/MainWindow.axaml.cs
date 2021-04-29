@@ -16,6 +16,8 @@ namespace AvaloniaGUI {
 #endif
         }
 
+        public List<string> Elements { get; set; } = new List<string>() { };
+
         private int currentLibrarian = -1;
 
         public void SetupAskForDataWindow(AskForDataWindow wnd, IEnumerable<string> labels) {
@@ -48,6 +50,14 @@ namespace AvaloniaGUI {
             this.FindControl<ComboBox>("Tables").IsEnabled = true;
         }
 
+        public void updateListBox() {
+            var tables = this.FindControl<ListBox>("TablePrinter");
+            tables.Items = Elements;
+            var t = tables.Items;
+            tables.Items = null;
+            tables.Items = t;
+        }
+
         public async void OpenDbClick(object sender, RoutedEventArgs e) {
             var cal1 = this.FindControl<Button>("OpenButton");
             var fileDialog = new OpenFileDialog();
@@ -64,6 +74,21 @@ namespace AvaloniaGUI {
                 elem.Items = from table in GlobalContainer.Tables where table != "Tables" select table;
                 elem.SelectedIndex = 0;
             }
+            var tables = this.FindControl<ListBox>("TablePrinter");
+            var currentTable = (string)this.FindControl<ComboBox>("Tables").SelectedItem;
+            var command = new Common.SqlCommands.SqlSelect(currentTable);
+
+            var listoflists = Common.SqlCommands.SqliteAdapter.Select(command);
+            var fields = Common.GlobalContainer.Fields(currentTable);
+            string str = "";
+            foreach (var sublist in listoflists) {
+                for (int i= 0; i < fields.Count(); i++) {
+                    str += $"{fields.ElementAt(i)}: {sublist.ElementAt(i)};";
+                }
+                Elements.Add(str);
+                str = "";
+            }
+            updateListBox();
         }
 
         public void onSubmit(List<string> fields) {
