@@ -8,7 +8,7 @@
         Title="AvaloniaGUI">
   <Grid ColumnDefinitions="*,2*" RowDefinitions="*,3*">
 
-    <ComboBox Name="Tables" IsEnabled="False" Margin="10 20 10 20" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" SelectedIndex="0"/>
+    <ComboBox Name="Tables" SelectionChanged="SelectionChangedHandler" IsEnabled="False" Margin="10 20 10 20" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" SelectedIndex="0"/>
 
     <Grid Grid.Row="0" Grid.Column="1" ColumnDefinitions="*,*,*,*">
       <Button Name="AddTeacherButton" Click="AddStudentEntry" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Grid.Column="0" Margin="10 20 10 20">Add Student</Button>
@@ -21,15 +21,40 @@
       <Button Name="FilterButton" Grid.Row="0" Margin="10 10 10 10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">Filter</Button>
       <Button Name="HelpButton" Grid.Row="1" Margin="10 10 10 10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">Help</Button>
       <Button Name="LogoutButton" Grid.Row="2" Margin="10 10 10 10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">Logout</Button>
-      <Button Name="GodModeButton" Click="SwitchToGodMode" Grid.Row="3" Margin="10 10 10 10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">(_- () |)   /\/\ () |) (-</Button>
+      <Button Name="GodModeButton" Click="SwitchToGodMode" Grid.Row="3" Margin="10 10 10 10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">[_- () |)   /\/\ () |) [-</Button>
     </Grid>
 
     <!--<StackPanel Grid.Row="1" Grid.Column="1" Margin="10">
       <DataGrid AutoGenerateColumns="True" "></DataGrid>
     </StackPanel>-->
-    <ListBox Name="TablePrinter" Grid.Row="1" Grid.Column="1" Margin="10" Items="{Binding Elements}">
-      
-    </ListBox>
+    <DataGrid Name="TablePrinter" Grid.Row="1" Grid.Column="1" Margin="10" Items="{Binding Elements}">
+      <DataGrid.Columns>
+        <DataGridTextColumn Header="" Binding="{Binding Field0}"/>
+        <DataGridTextColumn Header="" Binding="{Binding Field1}"/>
+        <DataGridTextColumn Header="" Binding="{Binding Field2}"/>
+        <DataGridTextColumn Header="" Binding="{Binding Field3}"/>
+        <DataGridTextColumn Header="" Binding="{Binding Field4}"/>
+        <DataGridTextColumn Header="" Binding="{Binding Field5}"/>
+        <DataGridTextColumn Header="" Binding="{Binding Field6}"/>
+        <DataGridTextColumn Header="" Binding="{Binding Field7}"/>
+      </DataGrid.Columns>
+    </DataGrid>
+    <!--<ListBox Name="TablePrinter" Grid.Row="1" Grid.Column="1" Margin="10" Items="{Binding Elements}">
+      <ListBox.ItemTemplate>
+        <DataTemplate>
+          <Border Background="Red" CornerRadius="4" Padding="4">
+            <TextBlock Text="{Binding}"/>
+          </Border>
+        </DataTemplate>
+      </ListBox.ItemTemplate>-->
+      <!--<ListBox.Template>
+        <HeaderedContentControl>
+          <HeaderedContentControl.Header>ksjdlk</HeaderedContentControl.Header>
+          <HeaderedContentControl.Header>ksdf</HeaderedContentControl.Header>
+          <HeaderedContentControl.Header>ksjddffefk</HeaderedContentControl.Header>
+        </HeaderedContentControl>
+      </ListBox.Template>
+    </ListBox>-->
 
   </Grid>
 </Window>

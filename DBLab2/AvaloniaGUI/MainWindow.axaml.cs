@@ -6,8 +6,51 @@ using System.Collections.Generic;
 using System.Linq;
 using Common;
 using Common.SqlCommands;
+using System;
 
 namespace AvaloniaGUI {
+    public class Data {
+        public string Field0 { get; set; } = "";
+        public string Field1 { get; set; } = "";
+        public string Field2 { get; set; } = "";
+        public string Field3 { get; set; } = "";
+        public string Field4 { get; set; } = "";
+        public string Field5 { get; set; } = "";
+        public string Field6 { get; set; } = "";
+        public string Field7 { get; set; } = "";
+
+        public string this[int index] {
+            get {
+                switch (index) {
+                    case 0: return Field0;
+                    case 1: return Field1;
+                    case 2: return Field2;
+                    case 3: return Field3;
+                    case 4: return Field4;
+                    case 5: return Field5;
+                    case 6: return Field6;
+                    case 7: return Field7;
+                    default:
+                        throw new IndexOutOfRangeException("Wrong index");
+                }
+            }
+            set {
+                switch (index) {
+                    case 0: Field0 = value; break;
+                    case 1: Field1 = value; break;
+                    case 2: Field2 = value; break;
+                    case 3: Field3 = value; break;
+                    case 4: Field4 = value; break;
+                    case 5: Field5 = value; break;
+                    case 6: Field6 = value; break;
+                    case 7: Field7 = value; break;
+                    default:
+                        throw new IndexOutOfRangeException("Wrong index");
+                }
+            }
+        }
+    }
+
     public class MainWindow : Window {
         public MainWindow() {
             InitializeComponent();
@@ -16,9 +59,43 @@ namespace AvaloniaGUI {
 #endif
         }
 
-        public List<string> Elements { get; set; } = new List<string>() { };
+        public List<Data> Elements { get; set; } = new List<Data>() { };
 
         private int currentLibrarian = -1;
+
+        public void SelectionChangedHandler(object sender, SelectionChangedEventArgs args) {
+            Elements.Clear();
+            var tables = this.FindControl<DataGrid>("TablePrinter");
+            //var itemsPanel = new ;
+            //tables.DataTemplates.
+            //var dataGridColumn = new ListBoxTextColumn();
+            //dataGridColumn.Header = "First string";
+            //tables.Columns.Add(dataGridColumn);
+            var currentTable = (string)this.FindControl<ComboBox>("Tables").SelectedItem;
+            var command = new Common.SqlCommands.SqlSelect(currentTable);
+            
+            var listoflists = Common.SqlCommands.SqliteAdapter.Select(command);
+            var fields = Common.GlobalContainer.Fields(currentTable);
+            updateListBox();
+            foreach (var sublist in listoflists) {
+                if (sublist[0] == "Id") {
+                    for (int i = 0; i < 8; i++)
+                        if (i < fields.Count())
+                            tables.Columns[i].Header = sublist[i];
+                        else
+                            tables.Columns[i].Header = "";
+                    continue;
+                }
+                var shit = new Data();
+                for (int i = 0; i < fields.Count(); i++) {
+                    shit[i] = sublist.ElementAt(i);
+                    //str += $"{fields.ElementAt(i)}: {sublist.ElementAt(i)};";
+                }
+                Elements.Add(shit);
+                //str = "";
+            }
+            updateListBox();
+        } 
 
         public void SetupAskForDataWindow(AskForDataWindow wnd, IEnumerable<string> labels) {
             if (wnd is null) {
@@ -51,7 +128,7 @@ namespace AvaloniaGUI {
         }
 
         public void updateListBox() {
-            var tables = this.FindControl<ListBox>("TablePrinter");
+            var tables = this.FindControl<DataGrid>("TablePrinter");
             tables.Items = Elements;
             var t = tables.Items;
             tables.Items = null;
@@ -74,21 +151,6 @@ namespace AvaloniaGUI {
                 elem.Items = from table in GlobalContainer.Tables where table != "Tables" select table;
                 elem.SelectedIndex = 0;
             }
-            var tables = this.FindControl<ListBox>("TablePrinter");
-            var currentTable = (string)this.FindControl<ComboBox>("Tables").SelectedItem;
-            var command = new Common.SqlCommands.SqlSelect(currentTable);
-
-            var listoflists = Common.SqlCommands.SqliteAdapter.Select(command);
-            var fields = Common.GlobalContainer.Fields(currentTable);
-            string str = "";
-            foreach (var sublist in listoflists) {
-                for (int i= 0; i < fields.Count(); i++) {
-                    str += $"{fields.ElementAt(i)}: {sublist.ElementAt(i)};";
-                }
-                Elements.Add(str);
-                str = "";
-            }
-            updateListBox();
         }
 
         public void onSubmit(List<string> fields) {
