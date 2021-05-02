@@ -8,6 +8,7 @@ using Common;
 using Common.SqlCommands;
 using System;
 
+
 namespace AvaloniaGUI {
     public class Data {
         public string Field0 { get; set; } = "";
@@ -66,17 +67,15 @@ namespace AvaloniaGUI {
         public void SelectionChangedHandler(object sender, SelectionChangedEventArgs args) {
             Elements.Clear();
             var tables = this.FindControl<DataGrid>("TablePrinter");
-            //var itemsPanel = new ;
-            //tables.DataTemplates.
-            //var dataGridColumn = new ListBoxTextColumn();
-            //dataGridColumn.Header = "First string";
-            //tables.Columns.Add(dataGridColumn);
-            var currentTable = (string)this.FindControl<ComboBox>("Tables").SelectedItem;
+
+            var currentTable = this.FindControl<ComboBox>("Tables").SelectedItem as string;
+            if (currentTable is null) {
+                return;
+            }
             var command = new Common.SqlCommands.SqlSelect(currentTable);
             
             var listoflists = Common.SqlCommands.SqliteAdapter.Select(command);
             var fields = Common.GlobalContainer.Fields(currentTable);
-            updateListBox();
             foreach (var sublist in listoflists) {
                 if (sublist[0] == "Id") {
                     for (int i = 0; i < 8; i++)
@@ -89,10 +88,8 @@ namespace AvaloniaGUI {
                 var shit = new Data();
                 for (int i = 0; i < fields.Count(); i++) {
                     shit[i] = sublist.ElementAt(i);
-                    //str += $"{fields.ElementAt(i)}: {sublist.ElementAt(i)};";
                 }
                 Elements.Add(shit);
-                //str = "";
             }
             updateListBox();
         } 
@@ -120,7 +117,7 @@ namespace AvaloniaGUI {
         }
 
         private void EnableControls() {
-            List<string> buttonsToEnable = new() { "AddTeacherButton", "AddStudentButton", "EditButton", "FilterButton" };
+            List<string> buttonsToEnable = new() { "AddTeacherButton", "AddStudentButton", "EditButton", "FilterButton", "GodModeButton" };
             foreach (var button in buttonsToEnable) {
                 this.FindControl<Button>(button).IsEnabled = true;
             }
@@ -136,7 +133,6 @@ namespace AvaloniaGUI {
         }
 
         public async void OpenDbClick(object sender, RoutedEventArgs e) {
-            var cal1 = this.FindControl<Button>("OpenButton");
             var fileDialog = new OpenFileDialog();
             fileDialog.Filters.Add(new FileDialogFilter() { Name = "Text", Extensions = { "db" } });
             var res = await fileDialog.ShowAsync(this);
@@ -146,15 +142,39 @@ namespace AvaloniaGUI {
 
             var isDbSet = SqliteAdapter.TrySetDatabase(res[0]);
             if (isDbSet) {
-                EnableControls();
+                this.FindControl<Button>("LoginButton").IsEnabled = true;
                 var elem = this.FindControl<ComboBox>("Tables");
-                elem.Items = from table in GlobalContainer.Tables where table != "Tables" select table;
-                elem.SelectedIndex = 0;
+                elem.Items = from table in GlobalContainer.Tables where table == "StudentCards" || table == "TeacherCards" select table;
             }
         }
 
-        public void onSubmit(List<string> fields) {
-               
+        public void onLoginPressed(object sender, RoutedEventArgs e) {
+            var wnd = new AskForDataWindow();
+            SetupAskForDataWindow(wnd, new List<string>() { "First name", "Last name" });
+            wnd.onSubmit = onLoginSubmit;
+            wnd.Show();
+        }
+
+        public void onLoginSubmit(List<string> fields) {
+            var request = new SqlSelect("LibraryEmployees");
+            var employees = Common.SqlCommands.SqliteAdapter.Select(request);
+            foreach (var employee in employees) {
+                if (employee.Contains(fields[0]) && employee.Contains(fields[1])) {
+                    EnableControls();
+                    currentLibrarian = int.Parse(employee[0]);
+                    break;
+                }
+            }
+        }
+
+        public void onSubmit(List<string> fields) {//BookId, DueDate, StudentId, TakenDate
+            var table = this.FindControl<ComboBox>("Tables").SelectedItem as string;
+            fields.Insert(2, currentLibrarian.ToString());
+            fields.Insert(3, "");
+            fields.Add("");
+            var request = new Common.SqlCommands.SqlInsertInto(table, fields);
+            SqliteAdapter.InsertInto(request);
+            updateListBox();
         }
 
         public void AddStudentEntry(object sender, RoutedEventArgs e) {

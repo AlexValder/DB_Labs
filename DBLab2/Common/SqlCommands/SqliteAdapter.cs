@@ -88,7 +88,8 @@ namespace Common.SqlCommands {
             while (reader.Read()) {
                 var tmp = new List<string>();
                 for (int c = 0; c < reader.FieldCount; c++) {
-                    tmp.Add(reader.GetString(c));
+                    var str = reader.GetValue(c);
+                    tmp.Add(str is null? "" : (string)str.ToString());
                 }
                 data.Add(tmp);
             }
