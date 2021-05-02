@@ -105,7 +105,8 @@ namespace Common.SqlCommands {
 
             var insertCommand = _sqlConnection!.CreateCommand();
             insertCommand.CommandText = command.Execute();
-            var @return = insertCommand.ExecuteNonQuery();
+            var @return = insertCommand.ExecuteNonQuery();//Shit happens here. It asks for 8 arguments but 7 given.
+            //Wht did it work in console mode???
             Printer.Info("{0} rows were affected", @return);
         }
 

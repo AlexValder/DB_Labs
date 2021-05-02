@@ -7,7 +7,7 @@ using System.Linq;
 using Common;
 using Common.SqlCommands;
 using System;
-
+using System.Collections.ObjectModel;
 
 namespace AvaloniaGUI {
     public class Data {
@@ -60,37 +60,11 @@ namespace AvaloniaGUI {
 #endif
         }
 
-        public List<Data> Elements { get; set; } = new List<Data>() { };
+        public ObservableCollection<Data> Elements { get; set; } = new ObservableCollection<Data>() { };
 
         private int currentLibrarian = -1;
 
         public void SelectionChangedHandler(object sender, SelectionChangedEventArgs args) {
-            Elements.Clear();
-            var tables = this.FindControl<DataGrid>("TablePrinter");
-
-            var currentTable = this.FindControl<ComboBox>("Tables").SelectedItem as string;
-            if (currentTable is null) {
-                return;
-            }
-            var command = new Common.SqlCommands.SqlSelect(currentTable);
-            
-            var listoflists = Common.SqlCommands.SqliteAdapter.Select(command);
-            var fields = Common.GlobalContainer.Fields(currentTable);
-            foreach (var sublist in listoflists) {
-                if (sublist[0] == "Id") {
-                    for (int i = 0; i < 8; i++)
-                        if (i < fields.Count())
-                            tables.Columns[i].Header = sublist[i];
-                        else
-                            tables.Columns[i].Header = "";
-                    continue;
-                }
-                var shit = new Data();
-                for (int i = 0; i < fields.Count(); i++) {
-                    shit[i] = sublist.ElementAt(i);
-                }
-                Elements.Add(shit);
-            }
             updateListBox();
         } 
 
@@ -125,11 +99,32 @@ namespace AvaloniaGUI {
         }
 
         public void updateListBox() {
+            Elements.Clear();
             var tables = this.FindControl<DataGrid>("TablePrinter");
-            tables.Items = Elements;
-            var t = tables.Items;
             tables.Items = null;
-            tables.Items = t;
+            var currentTable = this.FindControl<ComboBox>("Tables").SelectedItem as string;
+            if (currentTable is null) {
+                return;
+            }
+            var command = new Common.SqlCommands.SqlSelect(currentTable);
+            var listoflists = Common.SqlCommands.SqliteAdapter.Select(command);
+            var fields = Common.GlobalContainer.Fields(currentTable);
+            foreach (var sublist in listoflists) {
+                if (sublist[0] == "Id") {
+                    for (int i = 0; i < 8; i++)
+                        if (i < fields.Count())
+                            tables.Columns[i].Header = sublist[i];
+                        else
+                            tables.Columns[i].Header = "";
+                    continue;
+                }
+                var data = new Data();
+                for (int i = 0; i < fields.Count(); i++) {
+                    data[i] = sublist.ElementAt(i);
+                }
+                Elements.Add(data);
+            }
+            tables.Items = Elements;
         }
 
         public async void OpenDbClick(object sender, RoutedEventArgs e) {
@@ -167,25 +162,37 @@ namespace AvaloniaGUI {
             }
         }
 
-        public void onSubmit(List<string> fields) {//BookId, DueDate, StudentId, TakenDate
+        private void onSubmitLogic(List<string> values, List<string> fields) {
             var table = this.FindControl<ComboBox>("Tables").SelectedItem as string;
-            fields.Insert(2, currentLibrarian.ToString());
-            fields.Insert(3, "");
-            fields.Add("");
-            var request = new Common.SqlCommands.SqlInsertInto(table, fields);
+            if (table is null) {
+                return;
+            }
+            values.Add(currentLibrarian.ToString());
+            var request = new Common.SqlCommands.SqlInsertInto(table, values, fields);
             SqliteAdapter.InsertInto(request);
             updateListBox();
+        }
+
+        public void onTeacherSubmit(List<string> values) {//BookId, DueDate, TeacherId, TakenDate
+            onSubmitLogic(values, new List<string>() { "BookId", "TeacherId", "TakenDate", "LibraryEmployeeId" });
+        }
+
+        public void onStudentSubmit(List<string> values) {//BookId, DueDate, StudentId, TakenDate
+            onSubmitLogic(values, new List<string>() { "BookId", "DueDate", "StudentId", "TakenDate", "LibraryEmployeeId" });
         }
 
         public void AddStudentEntry(object sender, RoutedEventArgs e) {
             var wnd = new AvaloniaGUI.AskForDataWindow();
             SetupAskForDataWindow(wnd, new List<string>() { "BookId", "DueDate", "StudentId", "TakenDate" });
-            wnd.onSubmit = onSubmit;
+            wnd.onSubmit = onStudentSubmit;
             wnd.Show();
         }
 
         public void AddTeacherEntry(object sender, RoutedEventArgs e) {
-            //I will do it later...
+            var wnd = new AvaloniaGUI.AskForDataWindow();
+            SetupAskForDataWindow(wnd, new List<string>() { "BookId", "TeacherId", "TakenDate" });
+            wnd.onSubmit = onTeacherSubmit;
+            wnd.Show();
         }
 
         public void SwitchToGodMode(object sender, RoutedEventArgs e) {
