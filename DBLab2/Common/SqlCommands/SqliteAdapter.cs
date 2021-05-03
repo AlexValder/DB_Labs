@@ -88,7 +88,8 @@ namespace Common.SqlCommands {
             while (reader.Read()) {
                 var tmp = new List<string>();
                 for (int c = 0; c < reader.FieldCount; c++) {
-                    tmp.Add(reader.GetString(c));
+                    var str = reader.GetValue(c);
+                    tmp.Add(str is null? "" : (string)str.ToString());
                 }
                 data.Add(tmp);
             }
@@ -104,7 +105,8 @@ namespace Common.SqlCommands {
 
             var insertCommand = _sqlConnection!.CreateCommand();
             insertCommand.CommandText = command.Execute();
-            var @return = insertCommand.ExecuteNonQuery();
+            var @return = insertCommand.ExecuteNonQuery();//Shit happens here. It asks for 8 arguments but 7 given.
+            //Wht did it work in console mode???
             Printer.Info("{0} rows were affected", @return);
         }
 
