@@ -134,11 +134,9 @@ namespace AvaloniaGUI {
         private void GodTables_OnSelectionChanged(object? sender, SelectionChangedEventArgs e) {
             if (_grid == null) {
                 _grid = this.FindControl<ListBox>("GodGrid");
+                _grid.SelectedIndex = 0;
             }
-            if (_grid.SelectedItem != null) {
-                _tableName = _grid.SelectedItem!.ToString()!;
-                UpdateList();
-            }
+            UpdateList();
         }
     }
 }
