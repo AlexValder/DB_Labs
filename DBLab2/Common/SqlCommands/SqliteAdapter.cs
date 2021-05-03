@@ -89,7 +89,9 @@ namespace Common.SqlCommands {
                 var tmp = new List<string>();
                 for (int c = 0; c < reader.FieldCount; c++) {
                     var str = reader.GetValue(c);
-                    tmp.Add(str is null? "" : (string)str.ToString());
+#pragma warning disable CS8604 // Possible null reference argument. - FUCK THIS WARNING!
+                    tmp.Add(str is null ? "" : str!.ToString());
+#pragma warning restore CS8604 // Possible null reference argument.
                 }
                 data.Add(tmp);
             }
@@ -105,8 +107,7 @@ namespace Common.SqlCommands {
 
             var insertCommand = _sqlConnection!.CreateCommand();
             insertCommand.CommandText = command.Execute();
-            var @return = insertCommand.ExecuteNonQuery();//Shit happens here. It asks for 8 arguments but 7 given.
-            //Wht did it work in console mode???
+            var @return = insertCommand.ExecuteNonQuery();
             Printer.Info("{0} rows were affected", @return);
         }
 
