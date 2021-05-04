@@ -13,7 +13,7 @@
     <Grid Grid.Row="0" Grid.Column="1" ColumnDefinitions="*,*,*,*">
       <Button Name="AddTeacherButton" IsEnabled="False" Click="AddStudentEntry" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Grid.Column="0" Margin="10 20 10 20">Add Student</Button>
       <Button Name="AddStudentButton" IsEnabled="False" Click="AddTeacherEntry" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Grid.Column="1" Margin="10 20 10 20">Add Teacher</Button>
-      <Button Name="EditButton" IsEnabled="False" Grid.Column="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Margin="10 20 10 20">Edit Entry</Button>
+      <Button Name="UpdateButton" Click="ReloadDb" IsEnabled="False" Grid.Column="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Margin="10 20 10 20">Reload</Button>
       <Button Name="OpenButton" Click="OpenDbClick" Grid.Column="3" Margin="10 20 10 20" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">Open DB</Button>
     </Grid>
 
@@ -24,7 +24,7 @@
       <Button Name="GodModeButton" IsEnabled="False" Click="SwitchToGodMode" Grid.Row="3" Margin="10 10 10 10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">[_- () |)   /\/\ () |) [-</Button>
     </Grid>
 
-    <DataGrid Name="TablePrinter" Grid.Row="1" Grid.Column="1" Margin="10" Items="{Binding Elements}">
+    <DataGrid Name="TablePrinter" BeginningEdit="onCellEditBegining" CellEditEnded="onCellEditEnded" Grid.Row="1" Grid.Column="1" Margin="10" Items="{Binding Elements}">
       <DataGrid.Columns>
         <DataGridTextColumn Header="" Binding="{Binding Field0}"/>
         <DataGridTextColumn Header="" Binding="{Binding Field1}"/>

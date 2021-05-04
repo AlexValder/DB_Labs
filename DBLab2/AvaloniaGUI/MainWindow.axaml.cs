@@ -10,6 +10,10 @@ using System;
 using System.Collections.ObjectModel;
 
 namespace AvaloniaGUI {
+    public static class TempStorage {
+        public static Data data { get; set; } = new Data();
+    }
+
     public class Data {
         public string Field0 { get; set; } = "";
         public string Field1 { get; set; } = "";
@@ -19,6 +23,18 @@ namespace AvaloniaGUI {
         public string Field5 { get; set; } = "";
         public string Field6 { get; set; } = "";
         public string Field7 { get; set; } = "";
+
+        public Data() { }
+
+        public Data(Data another) {
+            for (int c = 0; c < 8; c++) {
+                this[c] = another[c];
+            }
+        }
+
+        public override string ToString() {
+            return $"{Field0} {Field1} {Field2} {Field3} {Field4} {Field5} {Field6} {Field7}";
+        }
 
         public string this[int index] {
             get {
@@ -65,8 +81,52 @@ namespace AvaloniaGUI {
         private int currentLibrarian = -1;
 
         public void SelectionChangedHandler(object sender, SelectionChangedEventArgs args) {
-            updateListBox();
-        } 
+            updateTablePrinter();
+        }
+
+        public void onCellEditBegining(object sender, DataGridBeginningEditEventArgs args) {
+            //if (args.Column.Header as string == "Id") {
+            //    return;
+            //}
+            var index = args.Row.GetIndex();
+            TempStorage.data = new Data(Elements[index]);
+        }
+
+        public void onCellEditEnded(object sender, DataGridCellEditEndedEventArgs args) {
+            var table = this.FindControl<ComboBox>("Tables").SelectedItem as string;
+            if (table is null) return;
+            var index = args.Row.GetIndex();
+            if (Elements[index][0] != TempStorage.data[0]) {
+                Elements[index] = new Data(TempStorage.data);
+                var errorWindow = new WarningErrorWindow();
+                errorWindow.FindControl<Label>("ErrorWarningMessage").Content = "Do whatever you want, but I won't allow you to change Id! Cocksucker...";
+                errorWindow.Show();
+                //updateTablePrinter();
+                return;
+            }
+            var headers = GlobalContainer.Fields(table);
+            var updatedData = new List<(string, string)>();
+            for (int c = 0; c < headers.Count(); c++) {
+                updatedData.Add((headers.ElementAt(c), Elements[index][c]));
+            }
+            var command = new SqlUpdate(
+                (string)table,
+                updatedData,
+                new List<(string, Operation, string)>() {
+                    ("Id", Operation.Equal, TempStorage.data[0])
+                }
+            );
+            try {
+                Common.SqlCommands.SqliteAdapter.Update(command);
+            } catch (Exception ex) {
+
+                var errorWindow = new WarningErrorWindow();
+                Elements[index] = new Data(TempStorage.data);
+                errorWindow.FindControl<Label>("ErrorWarningMessage").Content = ex.Message;
+                errorWindow.Show();
+                //updateTablePrinter();
+            }
+        }
 
         public void SetupAskForDataWindow(AskForDataWindow wnd, IEnumerable<string> labels) {
             if (wnd is null) {
@@ -86,19 +146,23 @@ namespace AvaloniaGUI {
             wnd.Height = wnd.Height / 7 * labels.Count();
         }
 
+        public void ReloadDb(object sender, RoutedEventArgs args) {
+            updateTablePrinter();
+        }
+
         private void InitializeComponent() {
             AvaloniaXamlLoader.Load(this);
         }
 
         private void EnableControls() {
-            List<string> buttonsToEnable = new() { "AddTeacherButton", "AddStudentButton", "EditButton", "FilterButton", "GodModeButton" };
+            List<string> buttonsToEnable = new() { "AddTeacherButton", "AddStudentButton", "FilterButton", "UpdateButton", "GodModeButton" };
             foreach (var button in buttonsToEnable) {
                 this.FindControl<Button>(button).IsEnabled = true;
             }
             this.FindControl<ComboBox>("Tables").IsEnabled = true;
         }
 
-        public void updateListBox() {
+        public void updateTablePrinter() {
             Elements.Clear();
             var tables = this.FindControl<DataGrid>("TablePrinter");
             tables.Items = null;
@@ -106,8 +170,10 @@ namespace AvaloniaGUI {
             if (currentTable is null) {
                 return;
             }
-            var command = new Common.SqlCommands.SqlSelect(currentTable);
-            var listoflists = Common.SqlCommands.SqliteAdapter.Select(command);
+            
+            var listoflists = Common.SqlCommands.SqliteAdapter.Select(
+                new Common.SqlCommands.SqlSelect(currentTable)
+            );
             var fields = Common.GlobalContainer.Fields(currentTable);
             foreach (var sublist in listoflists) {
                 if (sublist[0] == "Id") {
@@ -170,7 +236,7 @@ namespace AvaloniaGUI {
             values.Add(currentLibrarian.ToString());
             var request = new Common.SqlCommands.SqlInsertInto(table, values, fields);
             SqliteAdapter.InsertInto(request);
-            updateListBox();
+            updateTablePrinter();
         }
 
         public void onTeacherSubmit(List<string> values) {//BookId, DueDate, TeacherId, TakenDate

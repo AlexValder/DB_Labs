@@ -12,9 +12,9 @@ namespace AvaloniaGUI {
         // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
         // yet and stuff might break.
         public static void Main(string[] args) {
-            if (!Common.SqlCommands.SqliteAdapter.TrySetDatabase("Library.db")) {
-                return;
-            }
+            //if (!Common.SqlCommands.SqliteAdapter.TrySetDatabase("Library.db")) {
+            //    return;
+            //}
             //var t = new AvaloniaGUI.AskForDataWindow();
             //t.SetupAskForDataWindow(new List<string> { "FirstName", "LastName" });
             BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
