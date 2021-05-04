@@ -24,10 +24,11 @@ namespace AvaloniaGUI {
                 var field = this.FindControl<Label>($"Label{c}").Content as string;
                 var operation = this.FindControl<ComboBox>($"ComboBox{c}").SelectedItem as Operation?;
                 var value = this.FindControl<TextBox>($"TextBox{c}").Text;
+                var shallBeConsidered = this.FindControl<CheckBox>($"CheckBox{c}").IsChecked;
                 if (!string.IsNullOrWhiteSpace(value) && !string.IsNullOrWhiteSpace(field) && operation is not null) {
-                    fields.Add(field);
                     conditions.Add((field, (Operation)operation, value));
-                } else {
+                }
+                if (shallBeConsidered is not null && (bool)shallBeConsidered && field is not null) {
                     fields.Add(field);
                 }
             }

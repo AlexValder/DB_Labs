@@ -88,19 +88,23 @@ namespace AvaloniaGUI {
             var table = this.FindControl<ComboBox>("Tables").SelectedItem as string;
             if (table is null)
                 return;
-
-            var command = new SqlSelect(table, fields, list);
+#region GOVNOCODE
+            var command = list.Count != 0 ? new SqlSelect(table, fields, list) : new SqlSelect(table, fields);
             var selected = SqliteAdapter.Select(command);
             var tablePrinter = this.FindControl<DataGrid>("TablePrinter");
             tablePrinter.Items = new List<string>();
             Elements.Clear();
+            bool first = true;
             foreach (var element in selected) {
                 var data = new Data();
                 int p = 0;
-                for (int c = 0; c < 8; c++) {
+                for (int c = 0; c < fields.Count(); c++) {
                     if (fields[c] != string.Empty) {
-                        if (element[p] == "Id") {
-                            continue;
+                        if (first) {
+                            first = false;
+                            for (int u = 0; u < 8; u++)
+                                tablePrinter.Columns[u].Header = u < element.Count() ? element[u] : string.Empty; 
+                            break;
                         }
                         data[c] = element[p];
                         p++;
@@ -111,6 +115,7 @@ namespace AvaloniaGUI {
                 Elements.Add(data);
             }
             tablePrinter.Items = Elements;
+#endregion
         }
 
         public void onFilterButton(object sender, RoutedEventArgs args) {
@@ -123,6 +128,7 @@ namespace AvaloniaGUI {
                 var label = wnd.FindControl<Label>($"Label{c}");
                 var comboBox = wnd.FindControl<ComboBox>($"ComboBox{c}");
                 var textBox = wnd.FindControl<TextBox>($"TextBox{c}");
+                var checkBox = wnd.FindControl<CheckBox>($"CheckBox{c}");
                 if (c < headers.Count()) {
                     comboBox.Items = new List<Operation>() { Operation.Equal, Operation.EqualOrGreater, Operation.EqualOrLess, Operation.Greater, Operation.Less, Operation.NonEqual };
                     label.Content = headers[c];
@@ -131,6 +137,7 @@ namespace AvaloniaGUI {
                     label.IsVisible = false;
                     comboBox.IsVisible = false;
                     textBox.IsVisible = false;
+                    checkBox.IsVisible = false;
                 }
             }
             wnd.onSubmit = onFilterSubmit;

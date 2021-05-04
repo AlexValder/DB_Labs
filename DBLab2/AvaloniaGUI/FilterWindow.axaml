@@ -11,6 +11,7 @@
       <ColumnDefinition Width="*"/>
       <ColumnDefinition Width="*"/>
       <ColumnDefinition Width="*"/>
+      <ColumnDefinition Width="0.5*"/>
     </Grid.ColumnDefinitions>
     <Grid.RowDefinitions>
       <RowDefinition/>
@@ -47,6 +48,14 @@
     <TextBox Name="TextBox5" Grid.Row="5" Grid.Column="2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBox>
     <TextBox Name="TextBox6" Grid.Row="6" Grid.Column="2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBox>
     <TextBox Name="TextBox7" Grid.Row="7" Grid.Column="2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBox>
-    <Button Click="onSubmitPressed" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Grid.Row="8" Grid.Column="1">SUBMIT</Button>
+    <CheckBox Name="CheckBox0" Grid.Row="0" Grid.Column="3" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center"/>
+    <CheckBox Name="CheckBox1" Grid.Row="1" Grid.Column="3" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center"/>
+    <CheckBox Name="CheckBox2" Grid.Row="2" Grid.Column="3" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center"/>
+    <CheckBox Name="CheckBox3" Grid.Row="3" Grid.Column="3" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center"/>
+    <CheckBox Name="CheckBox4" Grid.Row="4" Grid.Column="3" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center"/>
+    <CheckBox Name="CheckBox5" Grid.Row="5" Grid.Column="3" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center"/>
+    <CheckBox Name="CheckBox6" Grid.Row="6" Grid.Column="3" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center"/>
+    <CheckBox Name="CheckBox7" Grid.Row="7" Grid.Column="3" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center"/>
+    <Button Click="onSubmitPressed" Grid.ColumnSpan="4" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Grid.Row="8" Grid.Column="0">SUBMIT</Button>
   </Grid>
 </Window>
