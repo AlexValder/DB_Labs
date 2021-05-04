@@ -1,0 +1,52 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="500"
+        Width="400" Height="500"
+        x:Class="AvaloniaGUI.FilterWindow"
+        Title="FilterWindow">
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="*"/>
+      <ColumnDefinition Width="*"/>
+      <ColumnDefinition Width="*"/>
+    </Grid.ColumnDefinitions>
+    <Grid.RowDefinitions>
+      <RowDefinition/>
+      <RowDefinition/>
+      <RowDefinition/>
+      <RowDefinition/>
+      <RowDefinition/>
+      <RowDefinition/>
+      <RowDefinition/>
+      <RowDefinition/>
+      <RowDefinition/>
+    </Grid.RowDefinitions>
+    <Label HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Name="Label0" Grid.Row="0">Label0</Label>
+    <Label HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Name="Label1" Grid.Row="1">Label1</Label>
+    <Label HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Name="Label2" Grid.Row="2">Label2</Label>
+    <Label HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Name="Label3" Grid.Row="3">Label3</Label>
+    <Label HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Name="Label4" Grid.Row="4">Label4</Label>
+    <Label HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Name="Label5" Grid.Row="5">Label5</Label>
+    <Label HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Name="Label6" Grid.Row="6">Label6</Label>
+    <Label HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Name="Label7" Grid.Row="7">Label7</Label>
+    <ComboBox Name="ComboBox0" Grid.Row="0" Grid.Column="1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"></ComboBox>
+    <ComboBox Name="ComboBox1" Grid.Row="1" Grid.Column="1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"></ComboBox>
+    <ComboBox Name="ComboBox2" Grid.Row="2" Grid.Column="1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"></ComboBox>
+    <ComboBox Name="ComboBox3" Grid.Row="3" Grid.Column="1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"></ComboBox>
+    <ComboBox Name="ComboBox4" Grid.Row="4" Grid.Column="1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"></ComboBox>
+    <ComboBox Name="ComboBox5" Grid.Row="5" Grid.Column="1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"></ComboBox>
+    <ComboBox Name="ComboBox6" Grid.Row="6" Grid.Column="1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"></ComboBox>
+    <ComboBox Name="ComboBox7" Grid.Row="7" Grid.Column="1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"></ComboBox>
+    <TextBox Name="TextBox0" Grid.Row="0" Grid.Column="2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBox>
+    <TextBox Name="TextBox1" Grid.Row="1" Grid.Column="2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBox>
+    <TextBox Name="TextBox2" Grid.Row="2" Grid.Column="2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBox>
+    <TextBox Name="TextBox3" Grid.Row="3" Grid.Column="2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBox>
+    <TextBox Name="TextBox4" Grid.Row="4" Grid.Column="2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBox>
+    <TextBox Name="TextBox5" Grid.Row="5" Grid.Column="2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBox>
+    <TextBox Name="TextBox6" Grid.Row="6" Grid.Column="2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBox>
+    <TextBox Name="TextBox7" Grid.Row="7" Grid.Column="2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBox>
+    <Button Click="onSubmitPressed" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Grid.Row="8" Grid.Column="1">SUBMIT</Button>
+  </Grid>
+</Window>

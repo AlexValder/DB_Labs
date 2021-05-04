@@ -84,10 +84,60 @@ namespace AvaloniaGUI {
             updateTablePrinter();
         }
 
+        public void onFilterSubmit(List<string> fields, List<(string, Operation, string)> list) {
+            var table = this.FindControl<ComboBox>("Tables").SelectedItem as string;
+            if (table is null)
+                return;
+
+            var command = new SqlSelect(table, fields, list);
+            var selected = SqliteAdapter.Select(command);
+            var tablePrinter = this.FindControl<DataGrid>("TablePrinter");
+            tablePrinter.Items = new List<string>();
+            Elements.Clear();
+            foreach (var element in selected) {
+                var data = new Data();
+                int p = 0;
+                for (int c = 0; c < 8; c++) {
+                    if (fields[c] != string.Empty) {
+                        if (element[p] == "Id") {
+                            continue;
+                        }
+                        data[c] = element[p];
+                        p++;
+                    } else {
+                        data[c] = string.Empty;
+                    }
+                }
+                Elements.Add(data);
+            }
+            tablePrinter.Items = Elements;
+        }
+
+        public void onFilterButton(object sender, RoutedEventArgs args) {
+            var table = this.FindControl<ComboBox>("Tables").SelectedItem as string;
+            if (table is null)
+                return;
+            var headers = GlobalContainer.Fields(table).ToList();
+            var wnd = new FilterWindow();
+            for (int c = 0; c < 8; c++) {
+                var label = wnd.FindControl<Label>($"Label{c}");
+                var comboBox = wnd.FindControl<ComboBox>($"ComboBox{c}");
+                var textBox = wnd.FindControl<TextBox>($"TextBox{c}");
+                if (c < headers.Count()) {
+                    comboBox.Items = new List<Operation>() { Operation.Equal, Operation.EqualOrGreater, Operation.EqualOrLess, Operation.Greater, Operation.Less, Operation.NonEqual };
+                    label.Content = headers[c];
+
+                } else {
+                    label.IsVisible = false;
+                    comboBox.IsVisible = false;
+                    textBox.IsVisible = false;
+                }
+            }
+            wnd.onSubmit = onFilterSubmit;
+            wnd.Show();
+        }
+
         public void onCellEditBegining(object sender, DataGridBeginningEditEventArgs args) {
-            //if (args.Column.Header as string == "Id") {
-            //    return;
-            //}
             var index = args.Row.GetIndex();
             TempStorage.data = new Data(Elements[index]);
         }
@@ -101,7 +151,6 @@ namespace AvaloniaGUI {
                 var errorWindow = new WarningErrorWindow();
                 errorWindow.FindControl<Label>("ErrorWarningMessage").Content = "Do whatever you want, but I won't allow you to change Id! Cocksucker...";
                 errorWindow.Show();
-                //updateTablePrinter();
                 return;
             }
             var headers = GlobalContainer.Fields(table);
@@ -119,12 +168,10 @@ namespace AvaloniaGUI {
             try {
                 Common.SqlCommands.SqliteAdapter.Update(command);
             } catch (Exception ex) {
-
                 var errorWindow = new WarningErrorWindow();
                 Elements[index] = new Data(TempStorage.data);
                 errorWindow.FindControl<Label>("ErrorWarningMessage").Content = ex.Message;
                 errorWindow.Show();
-                //updateTablePrinter();
             }
         }
 
