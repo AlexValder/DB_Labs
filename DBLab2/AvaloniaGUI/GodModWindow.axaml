@@ -23,8 +23,18 @@
       <Button Name="DummyButton" Grid.Row="3" Margin="10 10 10 10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">[dummy]</Button>
     </Grid>
 
-    <ListBox Name="GodGrid" Grid.Row="1" Grid.Column="1" Margin="10">
-    </ListBox>
+    <DataGrid Name="GodGrid" BeginningEdit="OnCellEditBegining" CellEditEnded="OnCellEditEnded" Grid.Row="1" Grid.Column="1" Margin="10" Items="{Binding Elements}">
+      <DataGrid.Columns>
+        <DataGridTextColumn Header="" Binding="{Binding Field0}"/>
+        <DataGridTextColumn Header="" Binding="{Binding Field1}"/>
+        <DataGridTextColumn Header="" Binding="{Binding Field2}"/>
+        <DataGridTextColumn Header="" Binding="{Binding Field3}"/>
+        <DataGridTextColumn Header="" Binding="{Binding Field4}"/>
+        <DataGridTextColumn Header="" Binding="{Binding Field5}"/>
+        <DataGridTextColumn Header="" Binding="{Binding Field6}"/>
+        <DataGridTextColumn Header="" Binding="{Binding Field7}"/>
+      </DataGrid.Columns>
+    </DataGrid>
 
   </Grid>
 </Window>

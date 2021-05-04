@@ -21,7 +21,7 @@ namespace Common {
         public static IEnumerable<string> Tables =>
             (_dictOfLists?.Keys ?? new List<string>()).ToImmutableList();
 
-        public static IEnumerable<string> Fields(string tableName)
+        public static IList<string> Fields(string tableName)
             => TableExists(tableName)
                 ? _dictOfLists![tableName].ToImmutableList()
                 : Array.Empty<string>().ToImmutableList();

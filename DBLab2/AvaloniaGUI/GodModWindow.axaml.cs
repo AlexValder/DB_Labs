@@ -1,3 +1,4 @@
+using System;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
@@ -13,9 +14,11 @@ using Common.SqlCommands;
 
 namespace AvaloniaGUI {
     public class GodModWindow : Window {
-        private ListBox _grid;
+        private DataGrid _grid;
         private ComboBox _tables;
-        private string _tableName = "";
+        private string? _tableName = "";
+
+        public ObservableCollection<Data> Elements { get; set; } = new();
 
         private readonly ImmutableList<string> _buttonNames = new List<string> {
             "AddButton",
@@ -26,12 +29,15 @@ namespace AvaloniaGUI {
 
         public GodModWindow() {
             InitializeComponent();
-            TryOpenDb("Library.db");
 #if DEBUG
             this.AttachDevTools();
 #endif
-            _grid = this.FindControl<ListBox>("GodGrid");
+            _grid = this.FindControl<DataGrid>("GodGrid");
             _tables = this.FindControl<ComboBox>("GodTables");
+            if (!string.IsNullOrEmpty(GlobalContainer.BdSelected)) {
+                EnableControls();
+                _tables.Items = from table in GlobalContainer.Tables where table != "Tables" select table;
+            }
         }
 
         private void InitializeComponent() {
@@ -39,14 +45,34 @@ namespace AvaloniaGUI {
         }
 
         private void UpdateList() {
-            _grid.Items = null;
-            var command = new SqlSelect(_tableName);
-            var lists = SqliteAdapter.Select(command);
-            var items = new List<string> {
-                string.Join(" ", GlobalContainer.Fields(_tableName))
-            };
-            items.AddRange(lists.Select(list => string.Join(" ", list)));
-            _grid.Items = items;
+            Elements.Clear();
+            var tables = this.FindControl<DataGrid>("GodGrid");
+            tables.Items = null;
+            var currentTable = this.FindControl<ComboBox>("GodTables").SelectedItem as string;
+            if (currentTable is null) {
+                return;
+            }
+
+            var listoflists = SqliteAdapter.Select(
+                new SqlSelect(currentTable)
+            );
+            var fields = GlobalContainer.Fields(currentTable);
+            foreach (var sublist in listoflists) {
+                if (sublist[0] == "Id") {
+                    for (int i = 0; i < 8; i++)
+                        if (i < fields.Count())
+                            tables.Columns[i].Header = sublist[i];
+                        else
+                            tables.Columns[i].Header = "";
+                    continue;
+                }
+                var data = new Data();
+                for (int i = 0; i < fields.Count(); i++) {
+                    data[i] = sublist.ElementAt(i);
+                }
+                Elements.Add(data);
+            }
+            tables.Items = Elements;
         }
 
         private static void SetupAskForDataWindow(in AskForDataWindow wnd, in string table, in IList<string> labels) {
@@ -67,6 +93,10 @@ namespace AvaloniaGUI {
         public void AddEntry(object sender, RoutedEventArgs e) {
             var godTables = this.FindControl<ComboBox>("GodTables");
             var selectedTable = godTables.SelectedItem as string;
+
+            if (selectedTable is null) {
+                return;
+            }
 
             var fields = GlobalContainer.Fields(selectedTable!).ToList();
             fields.Remove("Id");
@@ -93,8 +123,44 @@ namespace AvaloniaGUI {
         }
 
         private void DelEntry(object? _, RoutedEventArgs _2) {
-            var godTables = this.FindControl<ComboBox>("GodTables");
-            // var selectedTable
+            var selectedTable = _grid.SelectedItem as string;
+            if (selectedTable is null) {
+                return;
+            }
+        }
+
+        public void OnCellEditEnded(object sender, DataGridCellEditEndedEventArgs args) {
+            if (this.FindControl<ComboBox>("GodTables").SelectedItem is not string table) {
+                return;
+            }
+
+            var index = args.Row.GetIndex();
+            if (Elements[index][0] != TempStorage.data[0]) {
+                Elements[index] = new Data(TempStorage.data);
+                var errorWindow = new WarningErrorWindow();
+                errorWindow.FindControl<Label>("ErrorWarningMessage").Content = "Do whatever you want, but I won't allow you to change Id!";
+                errorWindow.Show();
+                return;
+            }
+            var headers = GlobalContainer.Fields(table);
+            var updatedData = headers.Select((t, i) => (headers.ElementAt(i), Elements[index][i])).ToList();
+            var command = new SqlUpdate(
+                table,
+                updatedData,
+                new List<(string, Operation, string)> {
+                    ("Id", Operation.Equal, TempStorage.data[0])
+                }
+            );
+            try {
+                SqliteAdapter.Update(command);
+            } catch (Exception ex) {
+
+                var errorWindow = new WarningErrorWindow();
+                Elements[index] = new Data(TempStorage.data);
+                errorWindow.FindControl<Label>("ErrorWarningMessage").Content = ex.Message;
+                errorWindow.Show();
+                //updateTablePrinter();
+            }
         }
 
         [SuppressMessage("ReSharper", "UnusedParameter.Local")]
@@ -125,18 +191,19 @@ namespace AvaloniaGUI {
             }
 
             EnableControls();
-            var elem = this.FindControl<ComboBox>("GodTables");
-            elem.Items = from table in GlobalContainer.Tables where table != "Tables" select table;
-            elem.SelectedIndex = 0;
-            _tableName = elem.SelectedItem!.ToString()!;
+            _tables.Items = from table in GlobalContainer.Tables where table != "Tables" select table;
         }
 
-        private void GodTables_OnSelectionChanged(object? sender, SelectionChangedEventArgs e) {
-            if (_grid == null) {
-                _grid = this.FindControl<ListBox>("GodGrid");
-                _grid.SelectedIndex = 0;
+        private void GodTables_OnSelectionChanged(object? _, SelectionChangedEventArgs _2) {
+            if (string.IsNullOrEmpty(_tableName)) {
+                _tableName = _grid.SelectedItem as string;
             }
             UpdateList();
+        }
+
+        private void OnCellEditBegining(object? sender, DataGridBeginningEditEventArgs e) {
+            var index = e.Row.GetIndex();
+            TempStorage.data = new Data(Elements[index]);
         }
     }
 }

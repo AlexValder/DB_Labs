@@ -4,7 +4,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="AvaloniaGUI.WarningErrorWindow"
-        Title="Oh Shit!">
+        Title="Oh My God!">
   <StackPanel HorizontalAlignment="Stretch">
     <Label HorizontalContentAlignment="Center" Name="ErrorWarnintTitle" Margin="0 0 0 50">ErrorWarningTitle</Label>
     <Label HorizontalContentAlignment="Center" Name="ErrorWarningMessage" Margin="0 50 0 0" >ErrorWarningTitle</Label>
