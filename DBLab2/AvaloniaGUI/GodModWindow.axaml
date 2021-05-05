@@ -12,15 +12,15 @@
     <Grid Grid.Row="0" Grid.Column="1" ColumnDefinitions="*,*,*,*">
       <Button Name="AddButton" Click="AddEntry" IsEnabled="True" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Grid.Column="0" Margin="10 20 10 20">Add Entry</Button>
       <Button Name="RemoveButton" Click="DelEntry" IsEnabled="False" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Grid.Column="1" Margin="10 20 10 20">Remove Entry</Button>
-      <Button Name="EditButton" IsEnabled="False" Grid.Column="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Margin="10 20 10 20">Edit Entry</Button>
+      <Button Name="ReloadButton" Click="ReloadButton_OnClick" IsEnabled="False" Grid.Column="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Margin="10 20 10 20">Reload DB</Button>
       <Button Name="OpenButton" Click="OpenButton_OnClick" Grid.Column="3" Margin="10 20 10 20" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">Open DB</Button>
     </Grid>
 
     <Grid Grid.Row="1" Grid.Column="0" RowDefinitions="*,*,*,*">
-      <Button Name="FilterButton" IsEnabled="False" Grid.Row="0" Margin="10 10 10 10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">Filter</Button>
+      <Button Name="FilterButton" Click="OnFilterButton" IsEnabled="False" Grid.Row="0" Margin="10 10 10 10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">Filter</Button>
       <Button Name="HelpButton" Grid.Row="1" Margin="10 10 10 10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">Help</Button>
       <Button Name="ExitGodMode" Click="OnExitGodMode" Grid.Row="2" Margin="10 10 10 10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">Exit (_- () |)   /\/\ () |) (-</Button>
-      <Button Name="DummyButton" Grid.Row="3" Margin="10 10 10 10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">[dummy]</Button>
+      <Button Name="CloseWorldButton" Click="OnCloseWorldButton" Grid.Row="3" Margin="10 10 10 10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">Close Program</Button>
     </Grid>
 
     <DataGrid Name="GodGrid" BeginningEdit="OnCellEditBegining" CellEditEnded="OnCellEditEnded" Grid.Row="1" Grid.Column="1" Margin="10" Items="{Binding Elements}">

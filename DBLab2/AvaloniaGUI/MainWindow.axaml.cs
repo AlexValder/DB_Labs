@@ -1,4 +1,4 @@
-using Avalonia;
+﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
@@ -24,16 +24,74 @@ namespace AvaloniaGUI {
 
         public ObservableCollection<Data> Elements { get; set; } = new ObservableCollection<Data>() { };
 
-        private int currentLibrarian = -1;
+        public static int CurrentLibrarian => currentLibrarian;
+        private static int currentLibrarian = -1;
 
         public void SelectionChangedHandler(object sender, SelectionChangedEventArgs args) {
             updateTablePrinter();
         }
 
+        public void onFilterSubmit(List<string> fields, List<(string, Operation, string)> list) {
+            var table = this.FindControl<ComboBox>("Tables").SelectedItem as string;
+            if (table is null)
+                return;
+#region GOVNOCODE
+            var command = list.Count != 0 ? new SqlSelect(table, fields, list) : new SqlSelect(table, fields);
+            var selected = SqliteAdapter.Select(command);
+            var tablePrinter = this.FindControl<DataGrid>("TablePrinter");
+            tablePrinter.Items = new List<string>();
+            Elements.Clear();
+            bool first = true;
+            foreach (var element in selected) {
+                var data = new Data();
+                int p = 0;
+                for (int c = 0; c < fields.Count(); c++) {
+                    if (fields[c] != string.Empty) {
+                        if (first) {
+                            first = false;
+                            for (int u = 0; u < 8; u++)
+                                tablePrinter.Columns[u].Header = u < element.Count() ? element[u] : string.Empty;
+                            break;
+                        }
+                        data[c] = element[p];
+                        p++;
+                    } else {
+                        data[c] = string.Empty;
+                    }
+                }
+                Elements.Add(data);
+            }
+            tablePrinter.Items = Elements;
+#endregion
+        }
+
+        public void onFilterButton(object sender, RoutedEventArgs args) {
+            var table = this.FindControl<ComboBox>("Tables").SelectedItem as string;
+            if (table is null)
+                return;
+            var headers = GlobalContainer.Fields(table).ToList();
+            var wnd = new FilterWindow();
+            for (int c = 0; c < 8; c++) {
+                var label = wnd.FindControl<Label>($"Label{c}");
+                var comboBox = wnd.FindControl<ComboBox>($"ComboBox{c}");
+                var textBox = wnd.FindControl<TextBox>($"TextBox{c}");
+                var checkBox = wnd.FindControl<CheckBox>($"CheckBox{c}");
+                if (c < headers.Count()) {
+                    comboBox.Items = new List<Operation>() { Operation.Equal, Operation.EqualOrGreater, Operation.EqualOrLess, Operation.Greater, Operation.Less, Operation.NonEqual };
+                    label.Content = headers[c];
+
+                } else {
+                    label.IsVisible = false;
+                    comboBox.IsVisible = false;
+                    textBox.IsVisible = false;
+                    checkBox.IsVisible = false;
+                }
+            }
+            wnd.onSubmit = onFilterSubmit;
+            wnd.Show();
+        }
+
         public void onCellEditBegining(object sender, DataGridBeginningEditEventArgs args) {
-            //if (args.Column.Header as string == "Id") {
-            //    return;
-            //}
             var index = args.Row.GetIndex();
             TempStorage.data = new Data(Elements[index]);
         }
@@ -45,51 +103,47 @@ namespace AvaloniaGUI {
             if (Elements[index][0] != TempStorage.data[0]) {
                 Elements[index] = new Data(TempStorage.data);
                 var errorWindow = new WarningErrorWindow();
-                errorWindow.FindControl<Label>("ErrorWarningMessage").Content = "Do whatever you want, but I won't allow you to change Id!";
+                errorWindow.FindControl<TextBlock>("ErrorWarningMessage").Text = "Do whatever you want, but I won't allow you to change Id!";
+                errorWindow.FindControl<Label>("ErrorWarningTitle").Content = "⚠ ERROR";
                 errorWindow.Show();
-                //updateTablePrinter();
                 return;
             }
             var headers = GlobalContainer.Fields(table);
-            var updatedData = new List<(string, string)>();
-            for (int c = 0; c < headers.Count(); c++) {
-                updatedData.Add((headers.ElementAt(c), Elements[index][c]));
+            var updatedData = headers.Select((t, c) => (headers.ElementAt(c), Elements[index][c])).ToList();
+            var (item1, item2) = updatedData[^1];
+            if (item1.EndsWith("Id") && string.IsNullOrEmpty(item2)) {
+                updatedData[^1] = (item1, currentLibrarian.ToString());
             }
             var command = new SqlUpdate(
-                (string)table,
+                table,
                 updatedData,
-                new List<(string, Operation, string)>() {
+                new List<(string, Operation, string)> {
                     ("Id", Operation.Equal, TempStorage.data[0])
                 }
             );
             try {
-                Common.SqlCommands.SqliteAdapter.Update(command);
+                SqliteAdapter.Update(command);
             } catch (Exception ex) {
-
                 var errorWindow = new WarningErrorWindow();
                 Elements[index] = new Data(TempStorage.data);
-                errorWindow.FindControl<Label>("ErrorWarningMessage").Content = ex.Message;
+                errorWindow.FindControl<Label>("ErrorWarningTitle").Content = "⚠ ERROR";
+                errorWindow.FindControl<TextBlock>("ErrorWarningMessage").Text = ex.Message;
                 errorWindow.Show();
-                //updateTablePrinter();
             }
         }
 
-        public void SetupAskForDataWindow(AskForDataWindow wnd, IEnumerable<string> labels) {
-            if (wnd is null) {
-                return;
-            }
-            labels.Count();
-            for (int c = 0; c < labels.Count(); c++) {
+        public void SetupAskForDataWindow(AskForDataWindow wnd, IList<string> labels) {
+            for (int c = 0; c < labels.Count; c++) {
                 var ctr = wnd.FindControl<Label>("Label" + c);
                 ctr.Content = labels.ElementAt(c);
             }
-            for (int c = labels.Count(); c < 8; c++) {
+            for (int c = labels.Count; c < 8; c++) {
                 var ctr = wnd.FindControl<Label>("Label" + c);
                 ctr.IsVisible = false;
                 var txb = wnd.FindControl<TextBox>("TextBox" + c);
                 txb.IsVisible = false;
             }
-            wnd.Height = wnd.Height / 7 * labels.Count();
+            wnd.Height = wnd.Height / 7 * labels.Count;
         }
 
         public void ReloadDb(object sender, RoutedEventArgs args) {
@@ -169,9 +223,13 @@ namespace AvaloniaGUI {
                 if (employee.Contains(fields[0]) && employee.Contains(fields[1])) {
                     EnableControls();
                     currentLibrarian = int.Parse(employee[0]);
-                    break;
+                    return;
                 }
             }
+            var wnd = new WarningErrorWindow();
+            wnd.FindControl<Label>("ErrorWarningTitle").Content = "BAD CREDENTIAlS";
+            wnd.FindControl<TextBlock>("ErrorWarningMessage").Text = "This library employee was not found.";
+            wnd.Show();
         }
 
         private void onSubmitLogic(List<string> values, List<string> fields) {

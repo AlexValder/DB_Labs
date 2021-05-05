@@ -14,8 +14,8 @@ using Common.SqlCommands;
 
 namespace AvaloniaGUI {
     public class GodModWindow : Window {
-        private DataGrid _grid;
-        private ComboBox _tables;
+        private readonly DataGrid _grid;
+        private readonly ComboBox _tables;
         private string? _tableName = "";
 
         public ObservableCollection<Data> Elements { get; set; } = new();
@@ -23,7 +23,7 @@ namespace AvaloniaGUI {
         private readonly ImmutableList<string> _buttonNames = new List<string> {
             "AddButton",
             "RemoveButton",
-            "EditButton",
+            "ReloadButton",
             "FilterButton",
         }.ToImmutableList();
 
@@ -123,10 +123,36 @@ namespace AvaloniaGUI {
         }
 
         private void DelEntry(object? _, RoutedEventArgs _2) {
-            var selectedTable = _grid.SelectedItem as string;
-            if (selectedTable is null) {
+            if (_tables.SelectedItem is not string table)
                 return;
+            var headers = GlobalContainer.Fields(table).ToList();
+            var wnd = new FilterWindow();
+            for (int c = 0; c < 8; c++) {
+                var label = wnd.FindControl<Label>($"Label{c}");
+                var comboBox = wnd.FindControl<ComboBox>($"ComboBox{c}");
+                var textBox = wnd.FindControl<TextBox>($"TextBox{c}");
+                var checkBox = wnd.FindControl<CheckBox>($"CheckBox{c}");
+                if (c < headers.Count) {
+                    comboBox.Items = new List<Operation> { Operation.Equal, Operation.EqualOrGreater, Operation.EqualOrLess, Operation.Greater, Operation.Less, Operation.NonEqual };
+                    label.Content = headers[c];
+
+                } else {
+                    label.IsVisible = false;
+                    comboBox.IsVisible = false;
+                    textBox.IsVisible = false;
+                    checkBox.IsVisible = false;
+                }
             }
+            wnd.onSubmit = OnDeleteSubmit;
+            wnd.Show();
+        }
+
+        private void OnDeleteSubmit(List<string> fields, List<(string, Operation, string)> list) {
+            if (_tables.SelectedItem is not string table)
+                return;
+            var command = new SqlDelete(table, list);
+            SqliteAdapter.Delete(command);
+            UpdateList();
         }
 
         public void OnCellEditEnded(object sender, DataGridCellEditEndedEventArgs args) {
@@ -144,6 +170,10 @@ namespace AvaloniaGUI {
             }
             var headers = GlobalContainer.Fields(table);
             var updatedData = headers.Select((t, i) => (headers.ElementAt(i), Elements[index][i])).ToList();
+            var (item1, item2) = updatedData[^1];
+            if (item1.EndsWith("Id") && string.IsNullOrEmpty(item2)) {
+                updatedData[^1] = (item1, MainWindow.CurrentLibrarian.ToString());
+            }
             var command = new SqlUpdate(
                 table,
                 updatedData,
@@ -204,6 +234,71 @@ namespace AvaloniaGUI {
         private void OnCellEditBegining(object? sender, DataGridBeginningEditEventArgs e) {
             var index = e.Row.GetIndex();
             TempStorage.data = new Data(Elements[index]);
+        }
+
+        private void OnFilterButton(object? sender, RoutedEventArgs e) {
+            if (_tables.SelectedItem is not string table)
+                return;
+            var headers = GlobalContainer.Fields(table).ToList();
+            var wnd = new FilterWindow();
+            for (int c = 0; c < 8; c++) {
+                var label = wnd.FindControl<Label>($"Label{c}");
+                var comboBox = wnd.FindControl<ComboBox>($"ComboBox{c}");
+                var textBox = wnd.FindControl<TextBox>($"TextBox{c}");
+                var checkBox = wnd.FindControl<CheckBox>($"CheckBox{c}");
+                if (c < headers.Count) {
+                    comboBox.Items = new List<Operation> { Operation.Equal, Operation.EqualOrGreater, Operation.EqualOrLess, Operation.Greater, Operation.Less, Operation.NonEqual };
+                    label.Content = headers[c];
+
+                } else {
+                    label.IsVisible = false;
+                    comboBox.IsVisible = false;
+                    textBox.IsVisible = false;
+                    checkBox.IsVisible = false;
+                }
+            }
+            wnd.onSubmit = OnFilterSubmit;
+            wnd.Show();
+        }
+
+        private void OnFilterSubmit(List<string> fields, List<(string, Operation, string)> list) {
+            if (_tables.SelectedItem is not string table)
+                return;
+            #region GOVNOCODE2
+            var command = list.Count != 0 ? new SqlSelect(table, fields, list) : new SqlSelect(table, fields);
+            var selected = SqliteAdapter.Select(command);
+            _grid.Items = new List<string>();
+            Elements.Clear();
+            bool first = true;
+            foreach (var element in selected) {
+                var data = new Data();
+                int p = 0;
+                for (int c = 0; c < fields.Count; c++) {
+                    if (fields[c] != string.Empty) {
+                        if (first) {
+                            first = false;
+                            for (int u = 0; u < 8; u++)
+                                _grid.Columns[u].Header = u < element.Count ? element[u] : string.Empty;
+                            break;
+                        }
+                        data[c] = element[p];
+                        p++;
+                    } else {
+                        data[c] = string.Empty;
+                    }
+                }
+                Elements.Add(data);
+            }
+            _grid.Items = Elements;
+            #endregion
+        }
+
+        private void ReloadButton_OnClick(object? sender, RoutedEventArgs e) {
+            UpdateList();
+        }
+
+        private void OnCloseWorldButton(object? sender, RoutedEventArgs e) {
+            Environment.Exit(0);
         }
     }
 }
