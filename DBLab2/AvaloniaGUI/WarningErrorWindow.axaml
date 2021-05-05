@@ -2,11 +2,18 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="200"
+        Width="300" Height="200"
         x:Class="AvaloniaGUI.WarningErrorWindow"
         Title="Oh Shit!">
-  <StackPanel HorizontalAlignment="Stretch">
-    <Label HorizontalContentAlignment="Center" Name="ErrorWarnintTitle" Margin="0 0 0 50">ErrorWarningTitle</Label>
-    <Label HorizontalContentAlignment="Center" Name="ErrorWarningMessage" Margin="0 50 0 0" >ErrorWarningTitle</Label>
-  </StackPanel>
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="0.65*"/>
+      <RowDefinition Height="*"/>
+      <RowDefinition Height="*"/>
+    </Grid.RowDefinitions>
+    <Label Grid.Row="0" HorizontalContentAlignment="Center" VerticalAlignment="Center" Name="ErrorWarningTitle">ErrorWarningTitle</Label>
+    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Row="1" Margin="10 20 10 10" Name="ErrorWarningMessage" TextWrapping="WrapWithOverflow">ErrorWarningMessage</TextBlock>
+    <Button Click="onClick" VerticalAlignment="Center" Grid.Row="2" HorizontalAlignment="Center">Ok, Got you</Button>
+  </Grid>
 </Window>

@@ -1,5 +1,6 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 
 namespace AvaloniaGUI {
@@ -9,6 +10,10 @@ namespace AvaloniaGUI {
 #if DEBUG
             this.AttachDevTools();
 #endif
+        }
+
+        public void onClick(object sender, RoutedEventArgs args) {
+            Close();
         }
 
         private void InitializeComponent() {

@@ -1,4 +1,4 @@
-using Avalonia;
+﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
@@ -156,7 +156,8 @@ namespace AvaloniaGUI {
             if (Elements[index][0] != TempStorage.data[0]) {
                 Elements[index] = new Data(TempStorage.data);
                 var errorWindow = new WarningErrorWindow();
-                errorWindow.FindControl<Label>("ErrorWarningMessage").Content = "Do whatever you want, but I won't allow you to change Id! Cocksucker...";
+                errorWindow.FindControl<TextBlock>("ErrorWarningMessage").Text = "Do whatever you want, but I won't allow you to change Id!";
+                errorWindow.FindControl<Label>("ErrorWarningTitle").Content = "⚠ ERROR";
                 errorWindow.Show();
                 return;
             }
@@ -177,7 +178,8 @@ namespace AvaloniaGUI {
             } catch (Exception ex) {
                 var errorWindow = new WarningErrorWindow();
                 Elements[index] = new Data(TempStorage.data);
-                errorWindow.FindControl<Label>("ErrorWarningMessage").Content = ex.Message;
+                errorWindow.FindControl<Label>("ErrorWarningTitle").Content = "⚠ ERROR";
+                errorWindow.FindControl<TextBlock>("ErrorWarningMessage").Text = ex.Message;
                 errorWindow.Show();
             }
         }
@@ -277,9 +279,13 @@ namespace AvaloniaGUI {
                 if (employee.Contains(fields[0]) && employee.Contains(fields[1])) {
                     EnableControls();
                     currentLibrarian = int.Parse(employee[0]);
-                    break;
+                    return;
                 }
             }
+            var wnd = new WarningErrorWindow();
+            wnd.FindControl<Label>("ErrorWarningTitle").Content = "BAD CREDENTIAlS";
+            wnd.FindControl<TextBlock>("ErrorWarningMessage").Text = "This library employee was not found.";
+            wnd.Show();
         }
 
         private void onSubmitLogic(List<string> values, List<string> fields) {
