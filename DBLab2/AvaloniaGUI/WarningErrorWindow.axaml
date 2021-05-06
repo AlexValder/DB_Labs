@@ -6,14 +6,9 @@
         Width="300" Height="200"
         x:Class="AvaloniaGUI.WarningErrorWindow"
         Title="Oh My God!">
-  <Grid>
-    <Grid.RowDefinitions>
-      <RowDefinition Height="0.65*"/>
-      <RowDefinition Height="*"/>
-      <RowDefinition Height="*"/>
-    </Grid.RowDefinitions>
+  <Grid RowDefinitions="0.65*,*,*">
     <Label Grid.Row="0" HorizontalContentAlignment="Center" VerticalAlignment="Center" Name="ErrorWarningTitle">ErrorWarningTitle</Label>
     <TextBlock HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Row="1" Margin="10 20 10 10" Name="ErrorWarningMessage" TextWrapping="WrapWithOverflow">ErrorWarningMessage</TextBlock>
-    <Button Click="onClick" VerticalAlignment="Center" Grid.Row="2" HorizontalAlignment="Center">Ok, Got you</Button>
+    <Button Name="OkButton" Click="OnClick" VerticalAlignment="Center" Grid.Row="2" HorizontalAlignment="Center">Ok, Got you</Button>
   </Grid>
 </Window>

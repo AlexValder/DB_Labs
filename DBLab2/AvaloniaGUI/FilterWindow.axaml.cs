@@ -8,7 +8,7 @@ using System;
 
 namespace AvaloniaGUI {
     public class FilterWindow : Window {
-        public Action<List<string>, List<(string, Operation, string)>> onSubmit { get; set; } = (_1, _2) => { };
+        public Action<List<string>, List<(string, Operation, string)>> OnSubmit { get; set; } = (_, _) => { };
 
         public FilterWindow() {
             InitializeComponent();
@@ -17,7 +17,7 @@ namespace AvaloniaGUI {
 #endif
         }
 
-        public void onSubmitPressed(object sender, RoutedEventArgs args) {
+        public void OnSubmitPressed(object sender, RoutedEventArgs args) {
             var conditions = new List<(string, Operation, string)>();
             var fields = new List<string>();
             for (int c = 0; c < 8; c++) {
@@ -32,7 +32,7 @@ namespace AvaloniaGUI {
                     fields.Add(field);
                 }
             }
-            onSubmit(fields, conditions);
+            OnSubmit(fields, conditions);
             Close();
         }
 

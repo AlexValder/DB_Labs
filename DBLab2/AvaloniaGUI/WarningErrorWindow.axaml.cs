@@ -12,8 +12,18 @@ namespace AvaloniaGUI {
 #endif
         }
 
-        public void onClick(object sender, RoutedEventArgs args) {
+        public void OnClick(object sender, RoutedEventArgs args) {
             Close();
+        }
+
+        public static void ShowCredits(string title, string header, string message, string button) {
+            var errorWindow = new WarningErrorWindow {
+                Title = title,
+            };
+            errorWindow.FindControl<Button>("OkButton").Content = button;
+            errorWindow.FindControl<TextBlock>("ErrorWarningMessage").Text = message;
+            errorWindow.FindControl<Label>("ErrorWarningTitle").Content = header;
+            errorWindow.Show();
         }
 
         private void InitializeComponent() {

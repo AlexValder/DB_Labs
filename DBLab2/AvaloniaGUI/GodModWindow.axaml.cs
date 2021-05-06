@@ -8,17 +8,16 @@ using System.Collections.Immutable;
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Reactive.Linq;
 using Common;
 using Common.SqlCommands;
 
 namespace AvaloniaGUI {
+    [SuppressMessage("ReSharper", "UnusedParameter.Local", Justification = "Signatures are predefined.")]
     public class GodModWindow : Window {
         private readonly DataGrid _grid;
         private readonly ComboBox _tables;
-        private string? _tableName = "";
 
-        public ObservableCollection<Data> Elements { get; set; } = new();
+        private ObservableCollection<Data> Elements { get; } = new();
 
         private readonly ImmutableList<string> _buttonNames = new List<string> {
             "AddButton",
@@ -46,10 +45,8 @@ namespace AvaloniaGUI {
 
         private void UpdateList() {
             Elements.Clear();
-            var tables = this.FindControl<DataGrid>("GodGrid");
-            tables.Items = null;
-            var currentTable = this.FindControl<ComboBox>("GodTables").SelectedItem as string;
-            if (currentTable is null) {
+            _grid.Items = null;
+            if (_tables.SelectedItem is not string currentTable) {
                 return;
             }
 
@@ -59,20 +56,18 @@ namespace AvaloniaGUI {
             var fields = GlobalContainer.Fields(currentTable);
             foreach (var sublist in listoflists) {
                 if (sublist[0] == "Id") {
-                    for (int i = 0; i < 8; i++)
-                        if (i < fields.Count())
-                            tables.Columns[i].Header = sublist[i];
-                        else
-                            tables.Columns[i].Header = "";
+                    for (int i = 0; i < 8; i++) {
+                        _grid.Columns[i].Header = i < fields.Count ? sublist[i] : "";
+                    }
                     continue;
                 }
                 var data = new Data();
-                for (int i = 0; i < fields.Count(); i++) {
+                for (int i = 0; i < fields.Count; i++) {
                     data[i] = sublist.ElementAt(i);
                 }
                 Elements.Add(data);
             }
-            tables.Items = Elements;
+            _grid.Items = Elements;
         }
 
         private static void SetupAskForDataWindow(in AskForDataWindow wnd, in string table, in IList<string> labels) {
@@ -103,11 +98,11 @@ namespace AvaloniaGUI {
             var wnd = new AskForDataWindow {
                 Table = selectedTable!
             };
-            wnd.onSubmit = list =>
+            wnd.OnSubmit = list =>
             {
-                var fields = GlobalContainer.Fields(wnd.Table).ToList();
-                fields.Remove("Id");
-                var command = new SqlInsertInto(wnd.Table, list, fields);
+                var tableFields = GlobalContainer.Fields(wnd.Table).ToList();
+                tableFields.Remove("Id");
+                var command = new SqlInsertInto(wnd.Table, list, tableFields);
                 try {
                     SqliteAdapter.InsertInto(command);
                 }
@@ -126,7 +121,9 @@ namespace AvaloniaGUI {
             if (_tables.SelectedItem is not string table)
                 return;
             var headers = GlobalContainer.Fields(table).ToList();
-            var wnd = new FilterWindow();
+            var wnd = new FilterWindow {
+                Title = "Delete Conditions",
+            };
             for (int c = 0; c < 8; c++) {
                 var label = wnd.FindControl<Label>($"Label{c}");
                 var comboBox = wnd.FindControl<ComboBox>($"ComboBox{c}");
@@ -143,13 +140,16 @@ namespace AvaloniaGUI {
                     checkBox.IsVisible = false;
                 }
             }
-            wnd.onSubmit = OnDeleteSubmit;
+            wnd.OnSubmit = OnDeleteSubmit;
             wnd.Show();
         }
 
         private void OnDeleteSubmit(List<string> fields, List<(string, Operation, string)> list) {
             if (_tables.SelectedItem is not string table)
                 return;
+            if (fields.Count == 0 || list.Count == 0) {
+                return;
+            }
             var command = new SqlDelete(table, list);
             SqliteAdapter.Delete(command);
             UpdateList();
@@ -161,8 +161,8 @@ namespace AvaloniaGUI {
             }
 
             var index = args.Row.GetIndex();
-            if (Elements[index][0] != TempStorage.data[0]) {
-                Elements[index] = new Data(TempStorage.data);
+            if (Elements[index][0] != TempStorage.Data[0]) {
+                Elements[index] = new Data(TempStorage.Data);
                 var errorWindow = new WarningErrorWindow();
                 errorWindow.FindControl<Label>("ErrorWarningMessage").Content = "Do whatever you want, but I won't allow you to change Id!";
                 errorWindow.Show();
@@ -178,18 +178,16 @@ namespace AvaloniaGUI {
                 table,
                 updatedData,
                 new List<(string, Operation, string)> {
-                    ("Id", Operation.Equal, TempStorage.data[0])
+                    ("Id", Operation.Equal, TempStorage.Data[0])
                 }
             );
             try {
                 SqliteAdapter.Update(command);
             } catch (Exception ex) {
-
                 var errorWindow = new WarningErrorWindow();
-                Elements[index] = new Data(TempStorage.data);
-                errorWindow.FindControl<Label>("ErrorWarningMessage").Content = ex.Message;
+                Elements[index] = new Data(TempStorage.Data);
+                errorWindow.FindControl<TextBlock>("ErrorWarningMessage").Text = ex.Message;
                 errorWindow.Show();
-                //updateTablePrinter();
             }
         }
 
@@ -225,15 +223,12 @@ namespace AvaloniaGUI {
         }
 
         private void GodTables_OnSelectionChanged(object? _, SelectionChangedEventArgs _2) {
-            if (string.IsNullOrEmpty(_tableName)) {
-                _tableName = _grid.SelectedItem as string;
-            }
             UpdateList();
         }
 
         private void OnCellEditBegining(object? sender, DataGridBeginningEditEventArgs e) {
             var index = e.Row.GetIndex();
-            TempStorage.data = new Data(Elements[index]);
+            TempStorage.Data = new Data(Elements[index]);
         }
 
         private void OnFilterButton(object? sender, RoutedEventArgs e) {
@@ -247,7 +242,14 @@ namespace AvaloniaGUI {
                 var textBox = wnd.FindControl<TextBox>($"TextBox{c}");
                 var checkBox = wnd.FindControl<CheckBox>($"CheckBox{c}");
                 if (c < headers.Count) {
-                    comboBox.Items = new List<Operation> { Operation.Equal, Operation.EqualOrGreater, Operation.EqualOrLess, Operation.Greater, Operation.Less, Operation.NonEqual };
+                    comboBox.Items = new List<Operation> {
+                        Operation.Equal,
+                        Operation.EqualOrGreater,
+                        Operation.EqualOrLess,
+                        Operation.Greater,
+                        Operation.Less,
+                        Operation.NonEqual,
+                    };
                     label.Content = headers[c];
 
                 } else {
@@ -257,14 +259,14 @@ namespace AvaloniaGUI {
                     checkBox.IsVisible = false;
                 }
             }
-            wnd.onSubmit = OnFilterSubmit;
+            wnd.OnSubmit = OnFilterSubmit;
             wnd.Show();
         }
 
         private void OnFilterSubmit(List<string> fields, List<(string, Operation, string)> list) {
             if (_tables.SelectedItem is not string table)
                 return;
-            #region GOVNOCODE2
+
             var command = list.Count != 0 ? new SqlSelect(table, fields, list) : new SqlSelect(table, fields);
             var selected = SqliteAdapter.Select(command);
             _grid.Items = new List<string>();
@@ -290,15 +292,22 @@ namespace AvaloniaGUI {
                 Elements.Add(data);
             }
             _grid.Items = Elements;
-            #endregion
+            _grid.IsReadOnly = Elements.Count < GlobalContainer.FieldCount(table);
         }
 
         private void ReloadButton_OnClick(object? sender, RoutedEventArgs e) {
+            _grid.IsReadOnly = false;
             UpdateList();
         }
 
         private void OnCloseWorldButton(object? sender, RoutedEventArgs e) {
             Environment.Exit(0);
+        }
+
+        private void ShowCredits(object? sender, RoutedEventArgs e) {
+            // ReSharper disable StringLiteralTypo
+            WarningErrorWindow.ShowCredits("Credits", "MADE BY", "@ArthurMamedov\n@AlexValder", "Ok");
+            // ReSharper restore StringLiteralTypo
         }
     }
 }
