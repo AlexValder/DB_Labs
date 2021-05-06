@@ -31,12 +31,16 @@ namespace AvaloniaGUI {
         private readonly ComboBox _tables;
 
         public void SelectionChangedHandler(object sender, SelectionChangedEventArgs args) {
+            _printer.IsReadOnly = false;
             UpdateTablePrinter();
         }
 
         private void OnFilterSubmit(List<string> fields, List<(string, Operation, string)> list) {
             if (_tables.SelectedItem is not string table)
                 return;
+            if (fields.Count == 0 || list.Count == 0) {
+                return;
+            }
 
             var command = list.Count != 0 ? new SqlSelect(table, fields, list) : new SqlSelect(table, fields);
             var selected = SqliteAdapter.Select(command);
@@ -110,17 +114,19 @@ namespace AvaloniaGUI {
             var headers = GlobalContainer.Fields(table);
             var updatedData = headers.Select((_, c) => (headers.ElementAt(c), Elements[index][c])).ToList();
 
-            var hasSecondEmployee = false;
-            foreach (var (key, value) in updatedData) {
-                if (key != "LibraryEmployee2Id" || !string.IsNullOrEmpty(value)) continue;
-                updatedData.Remove((key, value));
-                updatedData.Add(("LibraryEmployee2Id", CurrentLibrarian.ToString()));
-                hasSecondEmployee = true;
-                break;
-            }
+            if (table == "StudentCards") {
+                var hasSecondEmployee = false;
+                foreach (var (key, value) in updatedData) {
+                    if (key != "LibraryEmployee2Id" || !string.IsNullOrEmpty(value)) continue;
+                    updatedData.Remove((key, value));
+                    updatedData.Add(("LibraryEmployee2Id", CurrentLibrarian.ToString()));
+                    hasSecondEmployee = true;
+                    break;
+                }
 
-            if (!hasSecondEmployee) {
-                updatedData.Add(("LibraryEmployee2Id", CurrentLibrarian.ToString()));
+                if (!hasSecondEmployee) {
+                    updatedData.Add(("LibraryEmployee2Id", CurrentLibrarian.ToString()));
+                }
             }
 
             var command = new SqlUpdate(

@@ -6,24 +6,7 @@
         Width="400" Height="500"
         x:Class="AvaloniaGUI.FilterWindow"
         Title="FilterWindow">
-  <Grid>
-    <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="*"/>
-      <ColumnDefinition Width="*"/>
-      <ColumnDefinition Width="*"/>
-      <ColumnDefinition Width="0.5*"/>
-    </Grid.ColumnDefinitions>
-    <Grid.RowDefinitions>
-      <RowDefinition/>
-      <RowDefinition/>
-      <RowDefinition/>
-      <RowDefinition/>
-      <RowDefinition/>
-      <RowDefinition/>
-      <RowDefinition/>
-      <RowDefinition/>
-      <RowDefinition/>
-    </Grid.RowDefinitions>
+  <Grid ColumnDefinitions="*,*,*,0.5*" RowDefinitions="*,*,*,*,*,*,*,*,*">
     <Label HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Name="Label0" Grid.Row="0">Label0</Label>
     <Label HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Name="Label1" Grid.Row="1">Label1</Label>
     <Label HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Name="Label2" Grid.Row="2">Label2</Label>

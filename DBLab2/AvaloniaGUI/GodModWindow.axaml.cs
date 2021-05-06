@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Linq;
 using Common;
 using Common.SqlCommands;
@@ -164,16 +165,29 @@ namespace AvaloniaGUI {
             if (Elements[index][0] != TempStorage.Data[0]) {
                 Elements[index] = new Data(TempStorage.Data);
                 var errorWindow = new WarningErrorWindow();
-                errorWindow.FindControl<Label>("ErrorWarningMessage").Content = "Do whatever you want, but I won't allow you to change Id!";
+                errorWindow.FindControl<TextBlock>("ErrorWarningMessage").Text = "Do whatever you want, but I won't allow you to change Id!";
+                errorWindow.FindControl<Label>("ErrorWarningTitle").Content = "⚠ ERROR";
                 errorWindow.Show();
                 return;
             }
             var headers = GlobalContainer.Fields(table);
             var updatedData = headers.Select((t, i) => (headers.ElementAt(i), Elements[index][i])).ToList();
-            var (item1, item2) = updatedData[^1];
-            if (item1.EndsWith("Id") && string.IsNullOrEmpty(item2)) {
-                updatedData[^1] = (item1, MainWindow.CurrentLibrarian.ToString());
+
+            if (table == "StudentCards") {
+                var hasSecondEmployee = false;
+                foreach (var (key, value) in updatedData) {
+                    if (key != "LibraryEmployee2Id" || !string.IsNullOrEmpty(value)) continue;
+                    updatedData.Remove((key, value));
+                    updatedData.Add(("LibraryEmployee2Id", MainWindow.CurrentLibrarian.ToString()));
+                    hasSecondEmployee = true;
+                    break;
+                }
+
+                if (!hasSecondEmployee) {
+                    updatedData.Add(("LibraryEmployee2Id", MainWindow.CurrentLibrarian.ToString()));
+                }
             }
+
             var command = new SqlUpdate(
                 table,
                 updatedData,
@@ -223,6 +237,7 @@ namespace AvaloniaGUI {
         }
 
         private void GodTables_OnSelectionChanged(object? _, SelectionChangedEventArgs _2) {
+            _grid.IsReadOnly = false;
             UpdateList();
         }
 
@@ -266,6 +281,9 @@ namespace AvaloniaGUI {
         private void OnFilterSubmit(List<string> fields, List<(string, Operation, string)> list) {
             if (_tables.SelectedItem is not string table)
                 return;
+            if (fields.Count == 0 || list.Count == 0) {
+                return;
+            }
 
             var command = list.Count != 0 ? new SqlSelect(table, fields, list) : new SqlSelect(table, fields);
             var selected = SqliteAdapter.Select(command);
