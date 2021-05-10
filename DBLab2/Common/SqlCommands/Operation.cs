@@ -1,7 +1,7 @@
 using System;
 
-namespace DBLab2.ConsoleController.SqlCommands {
-    
+namespace Common.SqlCommands {
+
     /// <summary>
     /// Used for Conditions field in <see cref="SqlUpdate"/> and <see cref="SqlDelete"/> classes.
     /// </summary>

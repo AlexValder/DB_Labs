@@ -2,9 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
-using System.Linq;
-using System.Net;
-using DBLab2.Common;
+using Common;
 using DBLab2.DBLogic;
 
 namespace DBLab2.ConsoleController {

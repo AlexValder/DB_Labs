@@ -7,14 +7,17 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.Data.Sqlite" Version="5.0.4" />
+      <PackageReference Include="Avalonia" Version="0.10.2" />
+      <PackageReference Include="Microsoft.Data.Sqlite" Version="5.0.5" />
     </ItemGroup>
 
     <ItemGroup>
       <None Remove="Library.db" />
-      <Content Include="Library.db">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\AvaloniaGUI\AvaloniaGUI.csproj" />
+      <ProjectReference Include="..\Common\Common.csproj" />
     </ItemGroup>
 
 </Project>

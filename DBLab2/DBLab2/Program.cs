@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-using DBLab2.Common;
+using Common;
 using DBLab2.ConsoleController;
 using DBLab2.DBLogic;
 
@@ -8,6 +8,7 @@ namespace DBLab2 {
     internal static class Program {
         private static readonly string DefaultLibraryDb = AppDomain.CurrentDomain.BaseDirectory + "Library.db";
 
+        [STAThread]
         internal static void Main(string[] args) {
 
             AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
@@ -24,14 +25,18 @@ namespace DBLab2 {
                 Printer.Error("Failed to load DB.");
             }
 
-            if (args.Length < 2 || args[1].Equals("console", StringComparison.InvariantCultureIgnoreCase)) {
+            if (args.Length < 1 || args[0].Equals("console", StringComparison.OrdinalIgnoreCase)) {
                 Printer.Info("DB selected: {0}", GlobalContainer.BdSelected);
                 ConsoleApp.Run();
                 Printer.Debug("Press any button to exit...");
                 Console.Read();
             }
+            else if (args.Length >= 1 && args[0].Equals("gui", StringComparison.OrdinalIgnoreCase)) {
+                AvaloniaGUI.Program.Main(Array.Empty<string>());
+            }
             else {
-                // TBA: GUI Application
+                Printer.Error("Invalid arguments. Acceptable arguments: none, 'console' or 'gui'.");
+                Environment.Exit(-2);
             }
         }
 

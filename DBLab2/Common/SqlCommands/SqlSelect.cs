@@ -1,7 +1,6 @@
-using System;
 using System.Collections.Generic;
 
-namespace DBLab2.ConsoleController.SqlCommands {
+namespace Common.SqlCommands {
 
     /// <summary>
     /// Represents SQL command SELECT %fields% from %table_name%
