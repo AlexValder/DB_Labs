@@ -2,55 +2,39 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        Name="MainWindow1"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="AvaloniaGUI.MainWindow"
         Title="AvaloniaGUI">
-  <Grid>
-    <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="*"/>
-      <ColumnDefinition Width="2*"/>
-    </Grid.ColumnDefinitions>
-    <Grid.RowDefinitions>
-      <RowDefinition Height="*"/>
-      <RowDefinition Height="3*"/>
-    </Grid.RowDefinitions>
+  <Grid ColumnDefinitions="*,2*" RowDefinitions="*,3*">
 
-    <ComboBox Name="Tables" Margin="10 20 10 20" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" SelectedIndex="0" >
-      <ComboBoxItem>First</ComboBoxItem>
-      <ComboBoxItem>Second</ComboBoxItem>
-      <ComboBoxItem>Third</ComboBoxItem>
-      <ComboBoxItem>Forth</ComboBoxItem>
-      <ComboBoxItem>Fifth</ComboBoxItem>
-    </ComboBox>
+    <ComboBox Name="Tables" SelectionChanged="SelectionChangedHandler" IsEnabled="False" Margin="10 20 10 20" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" SelectedIndex="0"/>
 
-    <Grid Grid.Column="1">
-      <Grid.ColumnDefinitions>
-        <ColumnDefinition/>
-        <ColumnDefinition/>
-        <ColumnDefinition/>
-        <ColumnDefinition/>
-      </Grid.ColumnDefinitions>
-      <Button Name="AddButton" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Grid.Column="0" Margin="10 20 10 20">➕</Button>
-      <Button Name="DeleteButton" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Grid.Column="1" Margin="10 20 10 20">➖</Button>
-      <Button Name="EditButton" Grid.Column="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Margin="10 20 10 20">✏</Button>
-      <Button Name="OpenButton" Grid.Column="3" Margin="10 20 10 20" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">Open DB</Button>
+    <Grid Grid.Row="0" Grid.Column="1" ColumnDefinitions="*,*,*,*">
+      <Button Name="AddTeacherButton" IsEnabled="False" Click="AddStudentEntry" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Grid.Column="0" Margin="10 20 10 20">Add Student</Button>
+      <Button Name="AddStudentButton" IsEnabled="False" Click="AddTeacherEntry" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Grid.Column="1" Margin="10 20 10 20">Add Teacher</Button>
+      <Button Name="UpdateButton" Click="ReloadDb" IsEnabled="False" Grid.Column="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Margin="10 20 10 20">Reload</Button>
+      <Button Name="OpenButton" Click="OpenDbClick" Grid.Column="3" Margin="10 20 10 20" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">Open DB</Button>
     </Grid>
 
-    <Grid Grid.Row="1">
-      <Grid.RowDefinitions>
-        <RowDefinition/>
-        <RowDefinition/>
-        <RowDefinition/>
-        <RowDefinition/>
-      </Grid.RowDefinitions>
-      <Button Name="FilterButton" Grid.Row="0" Margin="10 10 10 10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">📜</Button>
-      <Button Name="HelpButton" Grid.Row="1" Margin="10 10 10 10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">❔</Button>
-      <Button Name="DummyButton" Grid.Row="2" Margin="10 10 10 10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">[reserved]</Button>
-      <Button Grid.Row="3" Margin="10 10 10 10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">[reserved]</Button>
+    <Grid Grid.Row="1" Grid.Column="0" RowDefinitions="*,*,*,*">
+      <Button Name="FilterButton" Click="OnFilterButton" IsEnabled="False" Grid.Row="0" Margin="10 10 10 10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">Filter</Button>
+      <Button Name="CreditsButton" Click="ShowCredits" Grid.Row="1" Margin="10 10 10 10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">Credits</Button>
+      <Button Name="LoginButton" Click="OnLoginPressed" IsEnabled="False" Grid.Row="2" Margin="10 10 10 10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">Login</Button>
+      <Button Name="GodModeButton" IsEnabled="False" Click="SwitchToGodMode" Grid.Row="3" Margin="10 10 10 10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">[_- () |)   /\/\ () |) [-</Button>
     </Grid>
 
-    <ListBox Grid.Row="1" Grid.Column="1" Margin="10">
-    </ListBox>
-    
+    <DataGrid Name="TablePrinter" IsReadOnly="False" BeginningEdit="OnCellEditBegining" CellEditEnded="OnCellEditEnded" Grid.Row="1" Grid.Column="1" Margin="10" Items="{Binding Elements}">
+      <DataGrid.Columns>
+        <DataGridTextColumn Header="" Binding="{Binding Field0}"/>
+        <DataGridTextColumn Header="" Binding="{Binding Field1}"/>
+        <DataGridTextColumn Header="" Binding="{Binding Field2}"/>
+        <DataGridTextColumn Header="" Binding="{Binding Field3}"/>
+        <DataGridTextColumn Header="" Binding="{Binding Field4}"/>
+        <DataGridTextColumn Header="" Binding="{Binding Field5}"/>
+        <DataGridTextColumn Header="" Binding="{Binding Field6}"/>
+        <DataGridTextColumn Header="" Binding="{Binding Field7}"/>
+      </DataGrid.Columns>
+    </DataGrid>
   </Grid>
 </Window>

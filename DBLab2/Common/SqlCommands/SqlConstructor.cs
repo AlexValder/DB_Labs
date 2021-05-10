@@ -1,12 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Common;
-using Common.SqlCommands;
 using Conditions = System.ValueTuple<string, Common.SqlCommands.Operation, string>;
-using SqliteAdapter = DBLab2.DBLogic.SqliteAdapter;
 
-namespace DBLab2.ConsoleController {
+namespace Common.SqlCommands {
     public static class SqlConstructor {
 
         private const StringSplitOptions OPTIONS =

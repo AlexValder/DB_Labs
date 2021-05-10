@@ -1,16 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.IO;
 using System.Linq;
-using System.Text;
-using Common;
-using Common.SqlCommands;
 using Microsoft.Data.Sqlite;
 
-
-namespace DBLab2.DBLogic {
+namespace Common.SqlCommands {
     public static class SqliteAdapter {
         private static SqliteConnection? _sqlConnection;
 
@@ -93,7 +88,10 @@ namespace DBLab2.DBLogic {
             while (reader.Read()) {
                 var tmp = new List<string>();
                 for (int c = 0; c < reader.FieldCount; c++) {
-                    tmp.Add(reader.GetString(c));
+                    var str = reader.GetValue(c);
+#pragma warning disable CS8604 // Possible null reference argument. - FUCK THIS WARNING!
+                    tmp.Add(str is null ? "" : str!.ToString());
+#pragma warning restore CS8604 // Possible null reference argument.
                 }
                 data.Add(tmp);
             }

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.IO;
-using Avalonia.Controls;
-using AvaloniaGUI;
-using DBLab2.Common;
+using Common;
 using DBLab2.ConsoleController;
 using DBLab2.DBLogic;
 
