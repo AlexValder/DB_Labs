@@ -18,5 +18,8 @@
       <Compile Update="WarningErrorWindow.axaml.cs">
         <DependentUpon>WarningErrorWindow.axaml</DependentUpon>
       </Compile>
+      <Compile Update="FilterWindow.axaml.cs">
+        <DependentUpon>FilterWindow.axaml</DependentUpon>
+      </Compile>
     </ItemGroup>
 </Project>

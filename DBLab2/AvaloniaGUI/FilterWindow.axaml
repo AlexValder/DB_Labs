@@ -6,24 +6,7 @@
         Width="400" Height="500"
         x:Class="AvaloniaGUI.FilterWindow"
         Title="FilterWindow">
-  <Grid>
-    <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="*"/>
-      <ColumnDefinition Width="*"/>
-      <ColumnDefinition Width="*"/>
-      <ColumnDefinition Width="0.5*"/>
-    </Grid.ColumnDefinitions>
-    <Grid.RowDefinitions>
-      <RowDefinition/>
-      <RowDefinition/>
-      <RowDefinition/>
-      <RowDefinition/>
-      <RowDefinition/>
-      <RowDefinition/>
-      <RowDefinition/>
-      <RowDefinition/>
-      <RowDefinition/>
-    </Grid.RowDefinitions>
+  <Grid ColumnDefinitions="*,*,*,0.5*" RowDefinitions="*,*,*,*,*,*,*,*,*">
     <Label HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Name="Label0" Grid.Row="0">Label0</Label>
     <Label HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Name="Label1" Grid.Row="1">Label1</Label>
     <Label HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Name="Label2" Grid.Row="2">Label2</Label>
@@ -56,6 +39,6 @@
     <CheckBox Name="CheckBox5" Grid.Row="5" Grid.Column="3" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center"/>
     <CheckBox Name="CheckBox6" Grid.Row="6" Grid.Column="3" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center"/>
     <CheckBox Name="CheckBox7" Grid.Row="7" Grid.Column="3" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center"/>
-    <Button Click="onSubmitPressed" Grid.ColumnSpan="4" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Grid.Row="8" Grid.Column="0">SUBMIT</Button>
+    <Button Click="OnSubmitPressed" Grid.ColumnSpan="4" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Grid.Row="8" Grid.Column="0">SUBMIT</Button>
   </Grid>
 </Window>

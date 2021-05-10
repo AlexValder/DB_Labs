@@ -4,14 +4,11 @@ using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using Common;
-using Common.SqlCommands;
 
 namespace AvaloniaGUI {
     public class AskForDataWindow : Window {
 
-        public string Table { get; set; } = "";
+        public string Table { get; init; } = "";
         public AskForDataWindow() {
             InitializeComponent();
 #if DEBUG
@@ -23,7 +20,7 @@ namespace AvaloniaGUI {
             AvaloniaXamlLoader.Load(this);
         }
 
-        public Action<List<string>> onSubmit { get; set; } = _ => { };
+        public Action<List<string>> OnSubmit { get; set; } = _ => { };
 
         public void SubmitPressed(object sender, RoutedEventArgs e) {
             var values = new List<string>();
@@ -35,7 +32,7 @@ namespace AvaloniaGUI {
                 }
                 values.Add(value.Text);
             }
-            onSubmit(values);
+            OnSubmit(values);
             Close();
         }
     }
